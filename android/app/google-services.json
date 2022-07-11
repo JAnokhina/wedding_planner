@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "110031330317",
+    "firebase_url": "https://wedding-planner-84457-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "wedding-planner-84457",
+    "storage_bucket": "wedding-planner-84457.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:110031330317:android:3149375ae39768aa130944",
+        "android_client_info": {
+          "package_name": "com.JuliaAnokhina.wedding_planner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "110031330317-ulfn50vpoo648j5p0m7gmtv5h9cor0kh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWYRzuJFRcY8idoWr9HJkwBk4SFEoymhM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "110031330317-ulfn50vpoo648j5p0m7gmtv5h9cor0kh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "110031330317-9chgko48rar7t85rju6fg0aseutk8q1u.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.juliaanokhina.weddingPlanner"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:110031330317:android:d748b4aa0aa7fffe130944",
+        "android_client_info": {
+          "package_name": "com.juliaanokhina.wedding_planner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "110031330317-ulfn50vpoo648j5p0m7gmtv5h9cor0kh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWYRzuJFRcY8idoWr9HJkwBk4SFEoymhM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "110031330317-ulfn50vpoo648j5p0m7gmtv5h9cor0kh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "110031330317-9chgko48rar7t85rju6fg0aseutk8q1u.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.juliaanokhina.weddingPlanner"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
