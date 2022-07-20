@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:wedding_planner/screens/home/home_page.dart';
+import 'package:wedding_planner/screens/loading_screen.dart';
 import 'package:wedding_planner/widgets/entry_field.dart';
 
 import '../../main.dart';
@@ -225,11 +227,25 @@ class _RegistrationFormState extends State<RegistrationForm> {
   }
 
   void _register() async {
+    User? user;
+
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
               email: _emailController.text, password: _passwordController.text);
-      Navigator.pop(context);
+      User? user = FirebaseAuth.instance.currentUser;
+      print(user);
+      if (user != null && !user.emailVerified) {
+        await user.sendEmailVerification();
+        user = FirebaseAuth.instance.currentUser;
+      }
+      // Future.delayed(Duration(seconds: 5));
+      if (user == null) {
+        loadingScreen(context);
+      } else {
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         setState(() {
@@ -244,12 +260,14 @@ class _RegistrationFormState extends State<RegistrationForm> {
         });
         print('The account already exists for that email.');
       } else {
+        print(e.message);
         setState(() {
           _showErrorMessage = true;
           errorMessage = 'Something went wrong, please try again.';
         });
       }
     } catch (e) {
+      print('Other exception');
       print(e);
       setState(() {
         _showErrorMessage = true;

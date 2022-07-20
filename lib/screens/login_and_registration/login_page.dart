@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:wedding_planner/main.dart';
 import 'package:wedding_planner/screens/login_and_registration/registration_page.dart';
 import 'package:wedding_planner/themes.dart';
@@ -9,6 +11,7 @@ import 'package:wedding_planner/widgets/submit_button.dart';
 
 import '../../widgets/app_bar.dart';
 import '../../widgets/entry_field.dart';
+import '../loading_screen.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -91,6 +94,17 @@ class LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    final user = _auth.currentUser;
+    _auth.authStateChanges().listen((user) {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        print('User is signed in!');
+        setState(() {
+          context.go('/home');
+        });
+      }
+    });
     return SizedBox(
       height: displayHeight(context) * 0.41,
       child: Form(
@@ -180,6 +194,15 @@ class LoginFormState extends State<LoginForm> {
                   _signInWithEmailAndPassword();
                 }
                 SystemChannels.textInput.invokeMethod('TextInput.hide');
+                if (user != null) {
+                  setState(() {
+                    context.go('/home');
+                  });
+                } else {
+                  setState(() {
+                    LoginPage();
+                  });
+                }
               },
             ),
             Visibility(
@@ -260,12 +283,7 @@ class LoginFormState extends State<LoginForm> {
                       ),
                       TextButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const RegistrationPage()),
-                            );
+                            context.go('/register');
                           },
                           child: const Text(
                             'Create one',
@@ -292,31 +310,36 @@ class LoginFormState extends State<LoginForm> {
     super.dispose();
   }
 
-  void _signInWithEmailAndPassword() async {
+  Future<User?> _signInWithEmailAndPassword() async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(
               email: _emailController.text, password: _passwordController.text);
+      return userCredential.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         setState(() {
           _showErrorMessage = true;
           errorMessage = 'No user found for that email.';
+          return null;
         });
         print('No user found for that email.');
       } else if (e.code == 'wrong-password') {
         setState(() {
           _showErrorMessage = true;
           errorMessage = 'Wrong password provided for that user.';
+          return null;
         });
         print('Wrong password provided for that user.');
       } else {
         setState(() {
           _showErrorMessage = true;
           errorMessage = 'Please enter a valid email and/or password';
+          return null;
         });
       }
     }
+    return null;
     // final User? user = (await _auth.signInWithEmailAndPassword(
     //   email: _emailController.text,
     //   password: _passwordController.text,
