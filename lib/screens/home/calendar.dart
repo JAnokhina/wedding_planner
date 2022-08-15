@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:wedding_planner/firebase_services/user_details_service.dart';
 
 import '../../main.dart';
 import '../../widgets/date_picker.dart';
+import '../../widgets/submit_button.dart';
 
 void calendarPopUp(BuildContext context) {
+  DateTime dateT = DateTime.now();
   showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -23,7 +27,7 @@ void calendarPopUp(BuildContext context) {
                 children: [
                   const Expanded(
                     child: Text(
-                      'Schedule Service',
+                      'Calendar',
                       style:
                           TextStyle(fontFamily: 'Roboto-Regular', fontSize: 16),
                       textAlign: TextAlign.center,
@@ -45,7 +49,15 @@ void calendarPopUp(BuildContext context) {
                   scrollDirection: Axis.vertical,
                   child: Column(
                     children: [
-                      SfDatePicker(),
+                      SfDatePicker(onDateTimeChanged: (newDateTime) {
+                        dateT = newDateTime;
+                      }),
+                      SubmitButton(
+                          buttonName: 'Submit',
+                          onPressedFunction: () {
+                            UserService(weddingDate: dateT).addProfileDetails();
+                            // context.pop();
+                          })
                     ],
                   ),
                 ),

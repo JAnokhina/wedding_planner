@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wedding_planner/main.dart';
+import 'package:wedding_planner/models/user.dart';
 import 'package:wedding_planner/screens/login_and_registration/registration_page.dart';
 import 'package:wedding_planner/themes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -310,11 +311,16 @@ class LoginFormState extends State<LoginForm> {
     super.dispose();
   }
 
+  //ToDO use the service
   Future<User?> _signInWithEmailAndPassword() async {
+    UserModel userUid;
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(
               email: _emailController.text, password: _passwordController.text);
+      if (userCredential.user != null) {
+        userUid = UserModel(uid: userCredential.user!.uid);
+      }
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

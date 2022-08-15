@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wedding_planner/screens/home/calendar.dart';
-import 'package:wedding_planner/widgets/bottom_nav_bar.dart';
 import 'package:wedding_planner/widgets/gridItem.dart';
+import 'package:wedding_planner/widgets/sign_out_button.dart';
 import '../../main.dart';
 import '../../themes.dart';
 import '../../widgets/app_bar.dart';
@@ -16,13 +16,7 @@ class HomePage extends StatelessWidget {
       appBar: WPAppBar(
         title: 'Home',
         showBackButton: false,
-        actions: [
-          IconButton(
-              onPressed: () {
-                context.go('/settings');
-              },
-              icon: const Icon(Icons.settings))
-        ],
+        actions: const [SignOutButton()],
       ),
       body: Container(
         width: displayWidth(context),
@@ -101,7 +95,6 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavBar(currentIndex: 0),
     );
   }
 

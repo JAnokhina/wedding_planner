@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class SignOutButton extends StatefulWidget {
   const SignOutButton({Key? key}) : super(key: key);
@@ -20,16 +21,17 @@ class _SignOutButtonState extends State<SignOutButton> {
       onPressed: () async {
         final User? user = await _auth.currentUser;
         if (user == null) {
-          Scaffold.of(context).showSnackBar(const SnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('No one has signed in.'),
           ));
           return;
         }
         await _auth.signOut();
         final String uid = user.uid;
-        Scaffold.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('$uid has successfully signed out.'),
         ));
+        context.go('/login');
       },
     );
   }

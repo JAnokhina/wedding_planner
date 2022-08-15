@@ -20,7 +20,7 @@ class _VenueState extends State<Venue> {
         title: 'Venue',
       ),
       body: ListView(children: [
-        GetUserName('OsMCCWfa7bGLqtOtMaDZ'),
+        GetUserName('toczHnasqyRjI1ldvslL'),
         AddUser(
           fullName: 'Julia',
           age: 26,
@@ -30,7 +30,7 @@ class _VenueState extends State<Venue> {
           child: TextButton(
             onPressed: () {
               firestore
-                  .collection('Guests')
+                  .collection('users')
                   .get()
                   .then((QuerySnapshot querySnapshop) {
                 querySnapshop.docs.forEach((doc) {

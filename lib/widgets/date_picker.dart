@@ -3,7 +3,9 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:wedding_planner/themes.dart';
 
 class SfDatePicker extends StatefulWidget {
-  const SfDatePicker({Key? key}) : super(key: key);
+  final ValueChanged<DateTime> onDateTimeChanged;
+  const SfDatePicker({Key? key, required this.onDateTimeChanged})
+      : super(key: key);
 
   @override
   State<SfDatePicker> createState() => _SfDatePickerState();
@@ -38,5 +40,6 @@ class _SfDatePickerState extends State<SfDatePicker> {
     setState(() {
       chosenDay = newSelection.value.toString();
     });
+    widget.onDateTimeChanged(newSelection.value);
   }
 }

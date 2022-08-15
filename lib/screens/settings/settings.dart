@@ -13,7 +13,6 @@ class Settings extends StatelessWidget {
         title: 'Settings',
       ),
       body: Container(),
-      bottomNavigationBar: BottomNavBar(currentIndex: 3),
     );
   }
 }

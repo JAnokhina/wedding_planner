@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wedding_planner/firebase_services/user_details_service.dart';
 import 'package:wedding_planner/main.dart';
 import 'package:wedding_planner/themes.dart';
 import 'package:wedding_planner/widgets/dropdown_menu.dart';
@@ -6,7 +7,6 @@ import 'package:wedding_planner/widgets/heading.dart';
 import 'package:wedding_planner/widgets/submit_button.dart';
 import 'package:wedding_planner/widgets/text_form_entry.dart';
 import '../../widgets/app_bar.dart';
-import '../../widgets/bottom_nav_bar.dart';
 
 class GuestsPage extends StatefulWidget {
   const GuestsPage({Key? key}) : super(key: key);
@@ -82,7 +82,17 @@ class _GuestsPageState extends State<GuestsPage> {
       const DropdownMenu(),
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
-        child: SubmitButton(buttonName: 'Submit', onPressedFunction: () {}),
+        child: SubmitButton(
+            buttonName: 'Submit',
+            onPressedFunction: () {
+              UserService(
+                      fullName: 'Julia Anokhina',
+                      status: 'Bride',
+                      partnerName: 'Chris Kruger',
+                      partnerStatus: 'Groom',
+                      weddingDate: DateTime.utc(2022, 12, 3))
+                  .addProfileDetails();
+            }),
       )
     ]);
   }

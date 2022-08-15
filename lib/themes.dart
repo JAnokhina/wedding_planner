@@ -22,10 +22,12 @@ class Themes {
           onPrimary: Colors.white,
         ),
       ),
-      textTheme: const TextTheme(
+      textTheme: TextTheme(
         bodyText1: TextStyle(fontFamily: 'Gothic'),
         bodyText2: TextStyle(fontFamily: 'Gothic'),
         labelMedium: TextStyle(fontFamily: 'Gothic'),
+        // bodyMedium: TextStyle(
+        //     fontFamily: 'Gothic', fontSize: 12, fontWeight: FontWeight.normal),
         caption: TextStyle(fontFamily: 'Gothic'),
         button: TextStyle(fontFamily: 'Gothic'),
       ),
