@@ -35,10 +35,10 @@ class _TextFormEntryState extends State<TextFormEntry> {
           autofocus: false,
           keyboardType: widget.keyboardType,
           validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter some text';
-            }
-            return null;
+            //   if (value == null || value.isEmpty) {
+            //     return 'Please enter some text';
+            //   }
+            //   return null;
           },
           decoration: InputDecoration(
             hintText: widget.hintText,

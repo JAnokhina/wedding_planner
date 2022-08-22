@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wedding_planner/firebase_services/guest_service.dart';
 import 'package:wedding_planner/firebase_services/user_details_service.dart';
 import 'package:wedding_planner/main.dart';
 import 'package:wedding_planner/themes.dart';
@@ -14,6 +15,8 @@ class GuestsPage extends StatefulWidget {
   @override
   State<GuestsPage> createState() => _GuestsPageState();
 }
+
+enum Relationship { family, weddingParty, friend, familyFriend }
 
 class _GuestsPageState extends State<GuestsPage> {
   @override
@@ -71,13 +74,28 @@ class _GuestsPageState extends State<GuestsPage> {
   }
 
   Widget singleGuestForm() {
+    TextEditingController nameController = TextEditingController();
+    TextEditingController surnameController = TextEditingController();
+    TextEditingController emailController = TextEditingController();
+    TextEditingController cellController = TextEditingController();
+    String dropdownSelection = 'Nothing';
     return ListView(children: [
-      const TextFormEntry(hintText: 'Name', keyboardType: TextInputType.name),
-      const TextFormEntry(
-          hintText: 'Surname', keyboardType: TextInputType.name),
-      const TextFormEntry(
-          hintText: 'Email address', keyboardType: TextInputType.emailAddress),
-      const TextFormEntry(hintText: 'Cell', keyboardType: TextInputType.phone),
+      TextFormEntry(
+          hintText: 'Name',
+          keyboardType: TextInputType.name,
+          textController: nameController),
+      TextFormEntry(
+          hintText: 'Surname',
+          keyboardType: TextInputType.name,
+          textController: surnameController),
+      TextFormEntry(
+          hintText: 'Email address',
+          keyboardType: TextInputType.emailAddress,
+          textController: emailController),
+      TextFormEntry(
+          hintText: 'Cell',
+          keyboardType: TextInputType.phone,
+          textController: cellController),
       const Heading(heading: 'Relationship to you'),
       const DropdownMenu(),
       Padding(
@@ -85,13 +103,11 @@ class _GuestsPageState extends State<GuestsPage> {
         child: SubmitButton(
             buttonName: 'Submit',
             onPressedFunction: () {
-              UserService(
-                      fullName: 'Julia Anokhina',
-                      status: 'Bride',
-                      partnerName: 'Chris Kruger',
-                      partnerStatus: 'Groom',
-                      weddingDate: DateTime.utc(2022, 12, 3))
-                  .addProfileDetails();
+              GuestService().addGuest(
+                  name: '${nameController.text} ${surnameController.text}',
+                  email: emailController.text,
+                  cell: cellController.text,
+                  relationship: dropdownSelection);
             }),
       )
     ]);

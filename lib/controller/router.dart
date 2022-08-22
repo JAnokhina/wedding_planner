@@ -1,5 +1,4 @@
 import 'package:go_router/go_router.dart';
-import 'package:wedding_planner/notes/notes.dart';
 import 'package:wedding_planner/screens/budget/budget.dart';
 import 'package:wedding_planner/screens/home/home_page.dart';
 import 'package:wedding_planner/screens/login_and_registration/login_page.dart';
@@ -8,6 +7,7 @@ import 'package:wedding_planner/screens/venue/venue.dart';
 import 'package:wedding_planner/widgets/Settings.dart';
 import '../screens/guests/guests.dart';
 import '../screens/ideas/ideas.dart';
+import '../screens/notes/notes.dart';
 import '../screens/profile/profile.dart';
 import '../screens/to-dos/to_dos.dart';
 import '../screens/vendors/vendors.dart';
