@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:wedding_planner/main.dart';
 import 'package:wedding_planner/widgets/app_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -19,36 +21,43 @@ class _VenueState extends State<Venue> {
       appBar: WPAppBar(
         title: 'Venue',
       ),
-      body: ListView(children: [
-        GetUserName('toczHnasqyRjI1ldvslL'),
-        AddUser(
-          fullName: 'Julia',
-          age: 26,
-          company: 'Acumen',
-        ),
-        Container(
-          child: TextButton(
-            onPressed: () {
-              firestore
-                  .collection('users')
-                  .get()
-                  .then((QuerySnapshot querySnapshop) {
-                querySnapshop.docs.forEach((doc) {
-                  name = doc['name'];
-                  setState(() {
-                    names.add(name);
-                  });
-                });
-              });
-            },
-            child: Text(
-              'Press me',
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
-        ),
-        for (var name in names) ...[Text(name)]
-      ]),
+      body: SizedBox(
+        width: displayWidth(context),
+        height: displayHeight(context) * 0.9,
+        child: GetUserName('toczHnasqyRjI1ldvslL'),
+        // child: Expanded(
+        //   child: ListView(children: [
+
+        // AddUser(
+        //   fullName: 'Julia',
+        //   age: 26,
+        //   company: 'Acumen',
+        // ),
+        // Container(
+        //   child: TextButton(
+        //     onPressed: () {
+        //       firestore
+        //           .collection('users')
+        //           .get()
+        //           .then((QuerySnapshot querySnapshop) {
+        //         querySnapshop.docs.forEach((doc) {
+        //           name = doc['name'];
+        //           setState(() {
+        //             names.add(name);
+        //           });
+        //         });
+        //       });
+        //     },
+        //     child: Text(
+        //       'Press me',
+        //       style: TextStyle(color: Colors.black),
+        //     ),
+        //   ),
+        // ),
+        // for (var name in names) ...[Text(name)]
+        // ]),
+        // ),
+      ),
     );
   }
 }
@@ -94,27 +103,81 @@ class GetUserName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
+    final FirebaseAuth _auth = FirebaseAuth.instance;
 
-    return FutureBuilder<DocumentSnapshot>(
-      future: users.doc(documentId).get(),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+    final docRef = users
+        .doc(_auth.currentUser?.uid)
+        .collection('Profile')
+        .doc('Partner 1');
+
+    docRef.snapshots().listen(
+          (event) => print("current data: ${event.data()}"),
+          onError: (error) => print("Listen failed: $error"),
+        );
+
+    final Stream<QuerySnapshot> _usersStream =
+        users.doc(_auth.currentUser?.uid).collection('Test').snapshots();
+
+    return StreamBuilder<QuerySnapshot>(
+      stream: _usersStream,
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
-          return Text("Something went wrong");
+          return const Text('Something went wrong');
         }
 
-        if (snapshot.hasData && !snapshot.data!.exists) {
-          return Text("Document does not exist");
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Text("Loading");
         }
 
-        if (snapshot.connectionState == ConnectionState.done) {
-          Map<String, dynamic> data =
-              snapshot.data!.data() as Map<String, dynamic>;
-          return Text("Full Name: ${data['full_name']} ${data['last_name']}");
-        }
+        // String returnStuff = '';
+        //
+        // snapshot.data!.docs.map((DocumentSnapshot document) {
+        //   Map<String, dynamic> doc = document.data()! as Map<String, dynamic>;
+        //   returnStuff = doc['Field 3'].toString();
+        //   // print('PRint: ' + doc.length.toString());
+        //   print('PRint: ' + doc['Field 3'].toString());
+        // });
+        //
+        // return Text(returnStuff);
 
-        return Text("loading");
+        return ListView(
+          children: snapshot.data!.docs
+              .map((DocumentSnapshot document) {
+                Map<String, dynamic> doc =
+                    document.data()! as Map<String, dynamic>;
+                // print('PRint: ' + doc.length.toString());
+                print('PRint: ' + doc['Field 3'].toString());
+                return ListTile(
+                  title: Text(doc['Field 3'].toString()),
+                  // subtitle: Text(data['company']),
+                );
+              })
+              .toList()
+              .cast(),
+        );
       },
     );
+
+    // return FutureBuilder<DocumentSnapshot>(
+    //   future: users.doc(documentId).get(),
+    //   builder:
+    //       (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+    //     if (snapshot.hasError) {
+    //       return Text("Something went wrong");
+    //     }
+    //
+    //     if (snapshot.hasData && !snapshot.data!.exists) {
+    //       return Text("Document does not exist");
+    //     }
+    //
+    //     if (snapshot.connectionState == ConnectionState.done) {
+    //       Map<String, dynamic> data =
+    //           snapshot.data!.data() as Map<String, dynamic>;
+    //       return Text("Full Name: ${data['full_name']} ${data['last_name']}");
+    //     }
+    //
+    //     return Text("loading");
+    //   },
+    // );
   }
 }
