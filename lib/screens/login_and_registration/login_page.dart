@@ -3,16 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wedding_planner/main.dart';
-import 'package:wedding_planner/models/user.dart';
-import 'package:wedding_planner/screens/login_and_registration/registration_page.dart';
 import 'package:wedding_planner/themes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wedding_planner/widgets/sign_out_button.dart';
 import 'package:wedding_planner/widgets/submit_button.dart';
 
+import '../../firebase_state_management/auth_state.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/entry_field.dart';
-import '../loading_screen.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -96,6 +94,7 @@ class LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     final user = _auth.currentUser;
+    final authState = Provider.of<AuthState>(context);
     _auth.authStateChanges().listen((user) {
       if (user == null) {
         print('User is currently signed out!');
@@ -192,7 +191,9 @@ class LoginFormState extends State<LoginForm> {
               buttonName: 'Log In',
               onPressedFunction: () async {
                 if ((_loginFormKey.currentState)!.validate()) {
-                  _signInWithEmailAndPassword();
+                  authState.logIn(
+                      email: _emailController.text,
+                      password: _passwordController.text);
                 }
                 SystemChannels.textInput.invokeMethod('TextInput.hide');
                 if (user != null) {
@@ -312,65 +313,65 @@ class LoginFormState extends State<LoginForm> {
   }
 
   //ToDO use the service
-  Future<User?> _signInWithEmailAndPassword() async {
-    UserModel userUid;
-    try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-              email: _emailController.text, password: _passwordController.text);
-      if (userCredential.user != null) {
-        userUid = UserModel(uid: userCredential.user!.uid);
-      }
-      return userCredential.user;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        setState(() {
-          _showErrorMessage = true;
-          errorMessage = 'No user found for that email.';
-          return null;
-        });
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        setState(() {
-          _showErrorMessage = true;
-          errorMessage = 'Wrong password provided for that user.';
-          return null;
-        });
-        print('Wrong password provided for that user.');
-      } else {
-        setState(() {
-          _showErrorMessage = true;
-          errorMessage = 'Please enter a valid email and/or password';
-          return null;
-        });
-      }
-    }
-    return null;
-    // final User? user = (await _auth.signInWithEmailAndPassword(
-    //   email: _emailController.text,
-    //   password: _passwordController.text,
-    // ))
-    //     .user;
-    //
-    // FirebaseAuth.instance.authStateChanges().listen((User? user) {
-    //   if (user == null) {
-    //     print('User is currently signed out!');
-    //   } else {
-    //     print('User is signed in!');
-    //   }
-    // });
-
-    // if (user != null) {
-    //   setState(() {
-    //     _showErrorMessage = true;
-    //     _success = true;
-    //     _userEmail = user.email!;
-    //   });
-    // } else {
-    //   setState(() {
-    //     _showErrorMessage = false;
-    //     _success = false;
-    //   });
-    // }
-  }
+  // Future<User?> _signInWithEmailAndPassword() async {
+  //   UserModel userUid;
+  //   try {
+  //     UserCredential userCredential = await FirebaseAuth.instance
+  //         .signInWithEmailAndPassword(
+  //             email: _emailController.text, password: _passwordController.text);
+  //     if (userCredential.user != null) {
+  //       userUid = UserModel(uid: userCredential.user!.uid);
+  //     }
+  //     return userCredential.user;
+  //   } on FirebaseAuthException catch (e) {
+  //     if (e.code == 'user-not-found') {
+  //       setState(() {
+  //         _showErrorMessage = true;
+  //         errorMessage = 'No user found for that email.';
+  //         return null;
+  //       });
+  //       print('No user found for that email.');
+  //     } else if (e.code == 'wrong-password') {
+  //       setState(() {
+  //         _showErrorMessage = true;
+  //         errorMessage = 'Wrong password provided for that user.';
+  //         return null;
+  //       });
+  //       print('Wrong password provided for that user.');
+  //     } else {
+  //       setState(() {
+  //         _showErrorMessage = true;
+  //         errorMessage = 'Please enter a valid email and/or password';
+  //         return null;
+  //       });
+  //     }
+  //   }
+  //   return null;
+  //   // final User? user = (await _auth.signInWithEmailAndPassword(
+  //   //   email: _emailController.text,
+  //   //   password: _passwordController.text,
+  //   // ))
+  //   //     .user;
+  //   //
+  //   // FirebaseAuth.instance.authStateChanges().listen((User? user) {
+  //   //   if (user == null) {
+  //   //     print('User is currently signed out!');
+  //   //   } else {
+  //   //     print('User is signed in!');
+  //   //   }
+  //   // });
+  //
+  //   // if (user != null) {
+  //   //   setState(() {
+  //   //     _showErrorMessage = true;
+  //   //     _success = true;
+  //   //     _userEmail = user.email!;
+  //   //   });
+  //   // } else {
+  //   //   setState(() {
+  //   //     _showErrorMessage = false;
+  //   //     _success = false;
+  //   //   });
+  //   // }
+  // }
 }

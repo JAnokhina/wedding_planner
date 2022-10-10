@@ -12,6 +12,9 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // final weddingDate = UserService().getWeddingDate();
+    print('On PAge');
+    // print(weddingDate.toString());
     return Scaffold(
       appBar: WPAppBar(
         title: 'Home',

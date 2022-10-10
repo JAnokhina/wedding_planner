@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:wedding_planner/firebase_state_management/auth_state.dart';
 import 'package:wedding_planner/screens/home/home_page.dart';
 import 'package:wedding_planner/screens/loading_screen.dart';
 import 'package:wedding_planner/widgets/entry_field.dart';
@@ -80,6 +82,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
   @override
   Widget build(BuildContext context) {
+    final authState = Provider.of<AuthState>(context);
     return Form(
       key: _registerFormKey,
       child: Column(
@@ -204,7 +207,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
             onPressedFunction: () async {
               SystemChannels.textInput.invokeMethod('TextInput.hide');
               if ((_registerFormKey.currentState)!.validate()) {
-                _register();
+                authState.register(
+                    email: _emailController.text,
+                    password: _passwordController.text);
               } else {}
             },
           ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wedding_planner/firebase_services/user_details_service.dart';
+import 'package:provider/provider.dart';
+import 'package:wedding_planner/firebase_state_management/profile_state.dart';
+import 'package:wedding_planner/models/profile_model.dart';
 
 import '../../main.dart';
 import '../../widgets/date_picker.dart';
@@ -53,10 +55,11 @@ void calendarPopUp(BuildContext context) {
                         dateT = newDateTime;
                       }),
                       SubmitButton(
-                          buttonName: 'Submit',
+                          buttonName: 'Ok',
                           onPressedFunction: () {
-                            UserService(weddingDate: dateT).addProfileDetails();
-                            // context.pop();
+                            Provider.of<ProfileState>(context, listen: false)
+                                .weddingDate = dateT;
+                            Navigator.pop(context);
                           })
                     ],
                   ),

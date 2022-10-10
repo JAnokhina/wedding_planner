@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:wedding_planner/firebase_services/user_details_service.dart';
 import 'package:wedding_planner/main.dart';
+import 'package:wedding_planner/models/profile_model.dart';
 import 'package:wedding_planner/themes.dart';
 import 'package:wedding_planner/widgets/dropdown_menu.dart';
 import 'package:wedding_planner/widgets/heading.dart';
 import 'package:wedding_planner/widgets/submit_button.dart';
 import 'package:wedding_planner/widgets/text_form_entry.dart';
+import '../../firebase_services/profile_service.dart';
 import '../../widgets/app_bar.dart';
 
 class GuestsPage extends StatefulWidget {
@@ -85,13 +86,10 @@ class _GuestsPageState extends State<GuestsPage> {
         child: SubmitButton(
             buttonName: 'Submit',
             onPressedFunction: () {
-              UserService(
-                      fullName: 'Julia Anokhina',
-                      status: 'Bride',
-                      partnerName: 'Chris Kruger',
-                      partnerStatus: 'Groom',
-                      weddingDate: DateTime.utc(2022, 12, 3))
-                  .addProfileDetails();
+              ProfileService().addProfileDetails(ProfileModel(
+                  partner1: Partner(name: 'Julia Anokhina', status: 'Bride'),
+                  partner2: Partner(name: 'Chris Kruger', status: 'Groom'),
+                  weddingDate: DateTime.utc(2022, 12, 3)));
             }),
       )
     ]);
