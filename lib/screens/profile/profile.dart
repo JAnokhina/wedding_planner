@@ -170,8 +170,6 @@ class _ProfileState extends State<Profile> {
                                   '${name2Controller.text} ${surname2Controller.text}',
                               status: status2),
                           weddingDate: weddingDate));
-                  //Todo I don't know how to return the date from calendar :(
-
                 } else if (validateName(name1Controller.text) != null ||
                     validateName(surname1Controller.text) != null ||
                     validateName(name2Controller.text) != null ||
