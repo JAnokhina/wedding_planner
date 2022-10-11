@@ -170,6 +170,25 @@ class _ProfileState extends State<Profile> {
                                   '${name2Controller.text} ${surname2Controller.text}',
                               status: status2),
                           weddingDate: weddingDate));
+
+                  //TODO fix this validation. alloww to update separate fields without editing others
+                } else if ((validateName(name1Controller.text) != null &&
+                        profile.partner1.name.isNotEmpty) ||
+                    (validateName(surname1Controller.text) != null &&
+                        profile.partner1.name.isNotEmpty) ||
+                    (validateName(name2Controller.text) != null &&
+                        profile.partner2.name.isNotEmpty) ||
+                    (validateName(surname2Controller.text) != null &&
+                        profile.partner2.name.isNotEmpty)) {
+                  Provider.of<ProfileState>(context, listen: false)
+                      .editProfileData(ProfileModel(
+                          partner1: Partner(
+                              name: '${profile.partner1.name}',
+                              status: profile.partner1.status),
+                          partner2: Partner(
+                              name: '${profile.partner2.name}',
+                              status: profile.partner2.status),
+                          weddingDate: weddingDate));
                 } else if (validateName(name1Controller.text) != null ||
                     validateName(surname1Controller.text) != null ||
                     validateName(name2Controller.text) != null ||
