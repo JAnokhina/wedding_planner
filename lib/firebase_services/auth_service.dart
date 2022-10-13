@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-
-import '../models/user_model.dart';
+import '../firebase_models/user_model.dart';
 
 class AuthService {
   /// creates a userModel object based on signed in user from Firebase

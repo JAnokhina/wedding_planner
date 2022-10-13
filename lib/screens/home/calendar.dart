@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:wedding_planner/firebase_state_management/profile_state.dart';
-import 'package:wedding_planner/models/profile_model.dart';
 
 import '../../main.dart';
 import '../../widgets/date_picker.dart';

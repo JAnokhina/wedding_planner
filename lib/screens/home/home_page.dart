@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:wedding_planner/firebase_state_management/profile_state.dart';
 import 'package:wedding_planner/screens/home/calendar.dart';
 import 'package:wedding_planner/widgets/gridItem.dart';
 import 'package:wedding_planner/widgets/sign_out_button.dart';
@@ -12,9 +15,11 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final weddingDate = UserService().getWeddingDate();
-    print('On PAge');
-    // print(weddingDate.toString());
+    DateTime weddingDate = Provider.of<ProfileState>(context).weddingDate;
+    DateFormat('dd').formatDuration(weddingDate);
+    print(weddingDate);
+    print('Date untill');
+    print(DateFormat('dd').formatDuration(weddingDate));
     return Scaffold(
       appBar: WPAppBar(
         title: 'Home',

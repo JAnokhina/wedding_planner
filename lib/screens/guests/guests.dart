@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:wedding_planner/main.dart';
-import 'package:wedding_planner/models/profile_model.dart';
 import 'package:wedding_planner/themes.dart';
 import 'package:wedding_planner/widgets/dropdown_menu.dart';
 import 'package:wedding_planner/widgets/heading.dart';
 import 'package:wedding_planner/widgets/submit_button.dart';
 import 'package:wedding_planner/widgets/text_form_entry.dart';
+import '../../firebase_models/profile_model.dart';
 import '../../firebase_services/profile_service.dart';
 import '../../widgets/app_bar.dart';
 

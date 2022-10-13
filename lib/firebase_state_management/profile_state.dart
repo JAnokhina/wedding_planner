@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:wedding_planner/firebase_services/profile_service.dart';
-import 'package:wedding_planner/models/profile_model.dart';
-
+import '../firebase_models/profile_model.dart';
 import '../locator.dart';
 
 class ProfileState extends ChangeNotifier {

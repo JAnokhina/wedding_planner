@@ -1,17 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:wedding_planner/locator.dart';
 import 'package:wedding_planner/screens/home/calendar.dart';
 import 'package:wedding_planner/widgets/chips_selector.dart';
 import 'package:wedding_planner/widgets/heading.dart';
 import 'package:wedding_planner/widgets/submit_button.dart';
 import 'package:wedding_planner/widgets/text_buttom_custom.dart';
 import 'package:wedding_planner/widgets/text_form_entry.dart';
-import '../../firebase_services/profile_service.dart';
+import '../../firebase_models/profile_model.dart';
 import '../../firebase_state_management/profile_state.dart';
-import '../../models/profile_model.dart';
 import '../../widgets/app_bar.dart';
 
 class Profile extends StatefulWidget {
