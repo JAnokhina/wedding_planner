@@ -10,16 +10,25 @@ import '../../main.dart';
 import '../../themes.dart';
 import '../../widgets/app_bar.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<ProfileState>(context, listen: false).refreshProfileData();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    DateTime weddingDate = Provider.of<ProfileState>(context).weddingDate;
-    DateFormat('dd').formatDuration(weddingDate);
-    print(weddingDate);
-    print('Date untill');
-    print(DateFormat('dd').formatDuration(weddingDate));
+    final profileState = Provider.of<ProfileState>(context);
+    DateTime weddingDate = profileState.profile.weddingDate;
+
     return Scaffold(
       appBar: WPAppBar(
         title: 'Home',
@@ -74,15 +83,15 @@ class HomePage extends StatelessWidget {
                   Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text(
-                        'Amount Days',
-                        style: TextStyle(
+                        '${weddingDate.difference(DateTime.now()).inDays} Days',
+                        style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 20),
                       ),
-                      Text(
+                      const Text(
                         'Until Your Big Day',
                         style: TextStyle(
                             color: Colors.white,
@@ -97,7 +106,7 @@ class HomePage extends StatelessWidget {
             Container(
               width: displayWidth(context),
               height: displayHeight(context) * 0.6,
-              padding: EdgeInsets.only(top: 50),
+              padding: const EdgeInsets.only(top: 50),
               child: buildGrid(context),
             ),
           ],

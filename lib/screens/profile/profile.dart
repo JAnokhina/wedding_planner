@@ -48,7 +48,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     final profileState = Provider.of<ProfileState>(context);
-    DateTime weddingDate = profileState.weddingDate;
+    DateTime weddingDate = profileState.profile.weddingDate;
     ProfileModel profile = profileState.profile;
     print('On page wedding time ${profile.partner1.name}');
     return Focus(

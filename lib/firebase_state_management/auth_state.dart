@@ -5,8 +5,16 @@ import 'package:wedding_planner/locator.dart';
 
 class AuthState extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  String _userEmail = '';
+  String get userEmail => _userEmail;
+
+  set userEmail(String value) {
+    _userEmail = value;
+    notifyListeners();
+  }
 
   Future<User?> getCurrentUser() async {
+    userEmail = _auth.currentUser!.email.toString();
     return _auth.currentUser;
   }
 

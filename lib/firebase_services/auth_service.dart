@@ -5,7 +5,7 @@ class AuthService {
   /// creates a userModel object based on signed in user from Firebase
   UserModel? userModelFromAuth(User? user) {
     if (user != null) {
-      return UserModel(uid: user.uid);
+      return UserModel(uid: user.uid, email: user.email.toString());
     } else {
       return null;
     }
