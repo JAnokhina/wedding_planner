@@ -5,10 +5,8 @@ import 'package:wedding_planner/firebase_models/guest_model.dart';
 import 'package:wedding_planner/firebase_state_management/guest_state.dart';
 import 'package:wedding_planner/main.dart';
 import 'package:wedding_planner/themes.dart';
-import 'package:wedding_planner/widgets/dropdown_menu.dart';
 import 'package:wedding_planner/widgets/heading.dart';
 import 'package:wedding_planner/widgets/submit_button.dart';
-import 'package:wedding_planner/widgets/text_form_entry.dart';
 import '../../widgets/app_bar.dart';
 
 class GuestsPage extends StatefulWidget {
@@ -41,28 +39,46 @@ class _GuestsPageState extends State<GuestsPage> {
             children: [
               SizedBox(
                 width: displayWidth(context),
-                height: 70,
+                height: displayHeight(context) * 0.12,
                 child: const TabBar(
                   indicatorColor: AppColours.pink,
                   unselectedLabelColor: AppColours.primary,
                   labelColor: AppColours.pink,
                   tabs: [
-                    Tab(icon: Icon(Icons.list), child: Text('guests')),
+                    Tab(
+                        icon: Icon(Icons.list),
+                        child: Center(
+                            child: Text(
+                          'guests',
+                          textAlign: TextAlign.center,
+                        ))),
                     Tab(
                         icon: Icon(Icons.person_outline),
-                        child: Text('single')),
+                        child: Center(
+                            child: Text(
+                          'add single',
+                          textAlign: TextAlign.center,
+                        ))),
                     Tab(
                         icon: Icon(Icons.people_outline),
-                        child: Text('couple')),
+                        child: Center(
+                            child: Text(
+                          'add couple',
+                          textAlign: TextAlign.center,
+                        ))),
                     Tab(
                         icon: Icon(Icons.family_restroom_outlined),
-                        child: Text('family')),
+                        child: Center(
+                            child: Text(
+                          'add family',
+                          textAlign: TextAlign.center,
+                        ))),
                   ],
                 ),
               ),
               Container(
                 width: displayWidth(context),
-                height: displayHeight(context) * 0.81,
+                height: displayHeight(context) * 0.77,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 child: TabBarView(children: [
