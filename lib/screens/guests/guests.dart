@@ -83,14 +83,7 @@ class _GuestsPageState extends State<GuestsPage> {
       const DropdownMenu(),
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
-        child: SubmitButton(
-            buttonName: 'Submit',
-            onPressedFunction: () {
-              ProfileService().addProfileDetails(ProfileModel(
-                  partner1: Partner(name: 'Julia Anokhina', status: 'Bride'),
-                  partner2: Partner(name: 'Chris Kruger', status: 'Groom'),
-                  weddingDate: DateTime.utc(2022, 12, 3)));
-            }),
+        child: SubmitButton(buttonName: 'Submit', onPressedFunction: () {}),
       )
     ]);
   }
@@ -169,17 +162,31 @@ class _GuestsPageState extends State<GuestsPage> {
   }
 
   Widget guestDetails(int guestNumber) {
+    TextEditingController nameController = TextEditingController();
+    TextEditingController surnameController = TextEditingController();
+    TextEditingController emailController = TextEditingController();
+    TextEditingController cellController = TextEditingController();
     return Column(
       children: [
         Heading(heading: 'Person $guestNumber'),
-        const TextFormEntry(hintText: 'Name', keyboardType: TextInputType.name),
-        const TextFormEntry(
-            hintText: 'Surname', keyboardType: TextInputType.name),
-        const TextFormEntry(
-            hintText: 'Email address',
-            keyboardType: TextInputType.emailAddress),
-        const TextFormEntry(
-            hintText: 'Cell', keyboardType: TextInputType.phone),
+        TextFormEntry(
+            hintText: 'Name',
+            keyboardType: TextInputType.name,
+            textController: nameController),
+        TextFormEntry(
+          hintText: 'Surname',
+          keyboardType: TextInputType.name,
+          textController: surnameController,
+        ),
+        TextFormEntry(
+          hintText: 'Email address',
+          keyboardType: TextInputType.emailAddress,
+          textController: emailController,
+        ),
+        TextFormEntry(
+            hintText: 'Cell',
+            keyboardType: TextInputType.phone,
+            textController: cellController),
       ],
     );
   }
