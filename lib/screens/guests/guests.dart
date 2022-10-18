@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:wedding_planner/firebase_services/guest_service.dart';
-import 'package:wedding_planner/firebase_services/user_details_service.dart';
 import 'package:wedding_planner/main.dart';
 import 'package:wedding_planner/themes.dart';
 import 'package:wedding_planner/widgets/dropdown_menu.dart';

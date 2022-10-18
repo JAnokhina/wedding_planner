@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:wedding_planner/firebase_models/guest_model.dart';
 
 class GuestService {
   FirebaseFirestore db = FirebaseFirestore.instance;
@@ -26,5 +27,40 @@ class GuestService {
     } catch (e) {
       print("Failed to add guest: $e");
     }
+  }
+
+  addGuests({required List<GuestModel> guests}) async {
+    try {
+      for (var guest in guests) {
+        await db
+            .collection('users')
+            .doc(_auth.currentUser!.uid)
+            .collection('Guests')
+            .add(guest.toMap());
+      }
+    } catch (e) {
+      print("Failed to add guest: $e");
+    }
+  }
+
+  fetchGuests() async {
+    List<GuestModel> allGuests = [];
+    try {
+      allGuests = await db
+          .collection('users')
+          .doc(_auth.currentUser!.uid)
+          .collection('Guests')
+          .get()
+          .then((guests) {
+        for (var guest in guests.docs) {
+          allGuests.add(GuestModel.fromMap(guest.data(), guest.id));
+        }
+        return allGuests.toList();
+      });
+      return allGuests.toList();
+    } catch (e) {
+      print('Failed to fetch guests. Error: $e');
+    }
+    return allGuests.toList();
   }
 }

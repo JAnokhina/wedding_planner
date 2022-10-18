@@ -43,10 +43,6 @@ class VenuesService {
     if (response.statusCode == 200) {
       try {
         _error = false;
-
-        print('Place id: ${json.decode(response.body)['results'][0]['types']}');
-        print(
-            'Place type: ${json.decode(response.body)['results'][0]['place_id']}');
         return json.decode(response.body)['results'][0]['place_id'];
       } on Exception catch (e) {
         _error = true;

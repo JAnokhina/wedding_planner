@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:wedding_planner/firebase_services/guest_service.dart';
 import 'package:wedding_planner/firebase_services/profile_service.dart';
 import 'package:wedding_planner/firebase_services/venues_service.dart';
 
@@ -12,6 +13,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => AuthService());
   locator.registerLazySingleton(() => ProfileService());
   locator.registerLazySingleton(() => VenuesService());
+  locator.registerLazySingleton(() => GuestService());
 
   // Store (Lazy)
   locator.registerLazySingleton(() => AuthState());
