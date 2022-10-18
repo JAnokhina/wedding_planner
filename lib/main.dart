@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wedding_planner/screens/login_and_registration/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:wedding_planner/firebase_state_management/profile_state.dart';
+import 'package:wedding_planner/firebase_state_management/venue_state.dart';
 import 'package:wedding_planner/themes.dart';
 
 import 'controller/router.dart';
+import 'firebase_state_management/auth_state.dart';
+import 'locator.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
+  setupLocator();
   runApp(const MyApp());
 }
 
@@ -19,15 +22,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // return MaterialApp(
-    //   debugShowCheckedModeBanner: false,
-    //   theme: Themes.lightTheme,
-    //   darkTheme: Themes.darkTheme,
-    //   themeMode: ThemeMode.system,
-    //   home: const LoginPage(),
-    // );
     return MultiProvider(
         providers: [
+          ChangeNotifierProvider.value(value: locator<AuthState>()),
+          ChangeNotifierProvider<ProfileState>(
+              create: (context) => ProfileState()),
+          ChangeNotifierProvider<VenueState>(create: (context) => VenueState()),
           Provider<MyRouter>(
             lazy: false,
             create: (BuildContext createContext) => MyRouter(),
@@ -36,6 +36,8 @@ class MyApp extends StatelessWidget {
         child: Builder(
           builder: (BuildContext context) {
             final router = Provider.of<MyRouter>(context, listen: false).router;
+            Provider.of<ProfileState>(context, listen: false)
+                .refreshProfileData();
             return MaterialApp.router(
               routeInformationParser: router.routeInformationParser,
               routeInformationProvider: router.routeInformationProvider,

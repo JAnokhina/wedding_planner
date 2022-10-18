@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:wedding_planner/screens/home/calendar.dart';
 import 'package:wedding_planner/widgets/chips_selector.dart';
 import 'package:wedding_planner/widgets/heading.dart';
 import 'package:wedding_planner/widgets/submit_button.dart';
 import 'package:wedding_planner/widgets/text_buttom_custom.dart';
 import 'package:wedding_planner/widgets/text_form_entry.dart';
-
-import '../../firebase_services/user_details_service.dart';
+import '../../firebase_models/profile_model.dart';
+import '../../firebase_state_management/profile_state.dart';
 import '../../widgets/app_bar.dart';
 
 class Profile extends StatefulWidget {
@@ -25,9 +27,14 @@ class _ProfileState extends State<Profile> {
   String status1 = '';
   String status2 = '';
 
+  initialise() {
+    Provider.of<ProfileState>(context, listen: false).refreshProfileData();
+  }
+
   @override
   void initState() {
     super.initState();
+    initialise();
     FocusNode focusNode = FocusNode();
     focusNode.addListener(() {});
   }
@@ -40,7 +47,10 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime weddingDate;
+    final profileState = Provider.of<ProfileState>(context);
+    DateTime weddingDate = profileState.profile.weddingDate;
+    ProfileModel profile = profileState.profile;
+    print('On page wedding time ${profile.partner1.name}');
     return Focus(
       onFocusChange: (hasFocus) {
         if (hasFocus) {
@@ -67,15 +77,22 @@ class _ProfileState extends State<Profile> {
                   children: [
                     const Heading(heading: 'Your Name'),
                     TextFormEntry(
-                        hintText: 'Name',
+                        hintText: (profile.partner1.name.isNotEmpty)
+                            ? profile.partner1.name.split(' ').first
+                            : 'Name',
                         keyboardType: TextInputType.name,
                         textController: name1Controller),
                     TextFormEntry(
-                        hintText: 'Surname',
+                        hintText: (profile.partner1.name.isNotEmpty)
+                            ? profile.partner1.name.split(' ').last
+                            : 'Surname',
                         keyboardType: TextInputType.name,
                         textController: surname1Controller),
                     ChipSelector(
                       choices: _choices,
+                      chosenIndex: (profile.partner1.status.isNotEmpty)
+                          ? _choices.indexOf(profile.partner1.status)
+                          : null,
                       onSelected: (index, isSelected) {
                         print('Selected: $isSelected');
                         if (isSelected) {
@@ -87,15 +104,22 @@ class _ProfileState extends State<Profile> {
                     ),
                     const Heading(heading: 'Your Partner\'s Name'),
                     TextFormEntry(
-                        hintText: 'Name',
+                        hintText: (profile.partner2.name.isNotEmpty)
+                            ? profile.partner2.name.split(' ').first
+                            : 'Name',
                         keyboardType: TextInputType.name,
                         textController: name2Controller),
                     TextFormEntry(
-                        hintText: 'Surname',
+                        hintText: (profile.partner2.name.isNotEmpty)
+                            ? profile.partner2.name.split(' ').last
+                            : 'Surname',
                         keyboardType: TextInputType.name,
                         textController: surname2Controller),
                     ChipSelector(
                       choices: _choices,
+                      chosenIndex: (profile.partner2.status.isNotEmpty)
+                          ? _choices.indexOf(profile.partner2.status)
+                          : null,
                       onSelected: (index, isSelected) {
                         if (isSelected) {
                           status2 = _choices[index];
@@ -107,9 +131,14 @@ class _ProfileState extends State<Profile> {
                     CustomTextButton(
                       onPressed: () {
                         calendarPopUp(context);
-                        print('From CAllendar popup');
                       },
-                      buttonName: 'Your wedding date',
+                      buttonName: (DateFormat('EEE dd - MMM - yyyy')
+                                  .format(profile.weddingDate) ==
+                              DateFormat('EEE dd - MMM - yyyy')
+                                  .format(DateTime.now()))
+                          ? 'Your wedding date'
+                          : DateFormat('EEE dd - MMM - yyyy')
+                              .format(profile.weddingDate),
                       icon: Icons.calendar_month,
                     )
                   ],
@@ -127,16 +156,36 @@ class _ProfileState extends State<Profile> {
                     validateName(surname1Controller.text) == null &&
                     validateName(name2Controller.text) == null &&
                     validateName(name2Controller.text) == null) {
-                  UserService(
-                    fullName:
-                        '${name1Controller.text} ${surname1Controller.text}',
-                    status: (status1.isEmpty) ? _choices[0] : status1,
-                    partnerName:
-                        '${name2Controller.text} ${surname2Controller.text}',
-                    partnerStatus: (status2.isEmpty) ? _choices[0] : status2,
-                    //Todo I don't know how to return the date from calendar :(
-                    // weddingDate: DateTime.utc(2022, 12, 3)
-                  ).addProfileDetails();
+                  Provider.of<ProfileState>(context, listen: false)
+                      .editProfileData(ProfileModel(
+                          partner1: Partner(
+                              name:
+                                  '${name1Controller.text} ${surname1Controller.text}',
+                              status: status1),
+                          partner2: Partner(
+                              name:
+                                  '${name2Controller.text} ${surname2Controller.text}',
+                              status: status2),
+                          weddingDate: weddingDate));
+
+                  //TODO fix this validation. alloww to update separate fields without editing others
+                } else if ((validateName(name1Controller.text) != null &&
+                        profile.partner1.name.isNotEmpty) ||
+                    (validateName(surname1Controller.text) != null &&
+                        profile.partner1.name.isNotEmpty) ||
+                    (validateName(name2Controller.text) != null &&
+                        profile.partner2.name.isNotEmpty) ||
+                    (validateName(surname2Controller.text) != null &&
+                        profile.partner2.name.isNotEmpty)) {
+                  Provider.of<ProfileState>(context, listen: false)
+                      .editProfileData(ProfileModel(
+                          partner1: Partner(
+                              name: '${profile.partner1.name}',
+                              status: profile.partner1.status),
+                          partner2: Partner(
+                              name: '${profile.partner2.name}',
+                              status: profile.partner2.status),
+                          weddingDate: weddingDate));
                 } else if (validateName(name1Controller.text) != null ||
                     validateName(surname1Controller.text) != null ||
                     validateName(name2Controller.text) != null ||

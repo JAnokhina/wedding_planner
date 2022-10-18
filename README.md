@@ -14,3 +14,6 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+<meta-data android:name="com.google.android.maps.v2.API_KEY"
+android:value="AIzaSyAKj3hHX5bDqPyrTdFfPp6GqiqfzDUHgMo"/>

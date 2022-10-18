@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:wedding_planner/firebase_state_management/profile_state.dart';
 import 'package:wedding_planner/screens/home/calendar.dart';
 import 'package:wedding_planner/widgets/gridItem.dart';
 import 'package:wedding_planner/widgets/sign_out_button.dart';
@@ -7,11 +10,25 @@ import '../../main.dart';
 import '../../themes.dart';
 import '../../widgets/app_bar.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<ProfileState>(context, listen: false).refreshProfileData();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final profileState = Provider.of<ProfileState>(context);
+    DateTime weddingDate = profileState.profile.weddingDate;
+
     return Scaffold(
       appBar: WPAppBar(
         title: 'Home',
@@ -66,15 +83,15 @@ class HomePage extends StatelessWidget {
                   Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text(
-                        'Amount Days',
-                        style: TextStyle(
+                        '${weddingDate.difference(DateTime.now()).inDays} Days',
+                        style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 20),
                       ),
-                      Text(
+                      const Text(
                         'Until Your Big Day',
                         style: TextStyle(
                             color: Colors.white,
@@ -89,7 +106,7 @@ class HomePage extends StatelessWidget {
             Container(
               width: displayWidth(context),
               height: displayHeight(context) * 0.6,
-              padding: EdgeInsets.only(top: 50),
+              padding: const EdgeInsets.only(top: 50),
               child: buildGrid(context),
             ),
           ],

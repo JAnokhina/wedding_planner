@@ -4,9 +4,11 @@ import '../main.dart';
 import '../themes.dart';
 
 class ChipSelector extends StatefulWidget {
-  const ChipSelector({Key? key, required this.choices, this.onSelected})
+  ChipSelector(
+      {Key? key, required this.choices, this.onSelected, this.chosenIndex})
       : super(key: key);
   final List<String> choices;
+  int? chosenIndex;
   final Function(int index, bool isSelected)? onSelected;
 
   @override
@@ -17,6 +19,9 @@ class _ChipSelectorState extends State<ChipSelector> {
   int _choiceIndex = 0;
   @override
   Widget build(BuildContext context) {
+    if (widget.chosenIndex != null) {
+      _choiceIndex = widget.chosenIndex!;
+    }
     return SizedBox(
       width: displayWidth(context),
       height: 60,
@@ -30,6 +35,7 @@ class _ChipSelectorState extends State<ChipSelector> {
                 selected: _choiceIndex == index,
                 selectedColor: AppColours.primary,
                 onSelected: (bool selected) {
+                  widget.chosenIndex = null;
                   setState(() {
                     _choiceIndex = selected ? index : 0;
                     print(selected);

@@ -1,17 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:wedding_planner/models/user.dart';
+import '../firebase_models/user_model.dart';
 
 class AuthService {
   /// creates a userModel object based on signed in user from Firebase
-  UserModel? _userModelFromAuth(User? user) {
+  UserModel? userModelFromAuth(User? user) {
     if (user != null) {
-      return UserModel(uid: user.uid);
+      return UserModel(uid: user.uid, email: user.email.toString());
     } else {
       return null;
     }
   }
 
-  Future<User?> _signInWithEmailAndPassword(
+  Future<User?> signInWithEmailAndPassword(
       String email, String password) async {
     bool _showErrorMessage = false;
     String errorMessage = '';
@@ -38,7 +38,7 @@ class AuthService {
     }
   }
 
-  void _register(String email, String password) async {
+  Future<User?> register(String email, String password) async {
     bool _showErrorMessage = false;
     String errorMessage = '';
     try {
@@ -81,5 +81,6 @@ class AuthService {
       _showErrorMessage = true;
       errorMessage = 'Something went wrong, registration was unsuccessful';
     }
+    return null;
   }
 }
