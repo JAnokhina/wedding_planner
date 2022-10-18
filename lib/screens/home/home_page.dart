@@ -63,23 +63,23 @@ class _HomePageState extends State<HomePage> {
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          calendarPopUp(context);
-                        },
-                        icon: const Icon(
-                          Icons.calendar_month,
-                        ),
-                        color: Colors.white,
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisSize: MainAxisSize.max,
+                  //   mainAxisAlignment: MainAxisAlignment.end,
+                  //   children: [
+                  //     IconButton(
+                  //       onPressed: () {
+                  //         calendarPopUp(context);
+                  //       },
+                  //       icon: const Icon(
+                  //         Icons.calendar_month,
+                  //       ),
+                  //       color: Colors.white,
+                  //     ),
+                  //   ],
+                  // ),
                   Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,

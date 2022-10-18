@@ -1,13 +1,13 @@
 class GuestModel {
-  final String id;
+  final String? id;
   final String name;
   final String email;
   final String cell;
-  final Enum relationship;
+  final String relationship;
   final bool rsvpStatus;
 
   GuestModel({
-    required this.id,
+    this.id,
     required this.name,
     required this.email,
     required this.cell,

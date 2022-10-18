@@ -29,7 +29,7 @@ class _TextFormEntryState extends State<TextFormEntry> {
       child: Align(
         alignment: Alignment.center,
         child: TextFormField(
-          key: _formKey,
+          // key: _formKey,
           controller: widget.textController,
           cursorColor: AppColours.primary,
           autofocus: false,

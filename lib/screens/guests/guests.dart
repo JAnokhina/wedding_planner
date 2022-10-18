@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wedding_planner/firebase_services/guest_service.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:provider/provider.dart';
+import 'package:wedding_planner/firebase_models/guest_model.dart';
+import 'package:wedding_planner/firebase_state_management/guest_state.dart';
 import 'package:wedding_planner/main.dart';
 import 'package:wedding_planner/themes.dart';
 import 'package:wedding_planner/widgets/dropdown_menu.dart';
@@ -18,17 +21,21 @@ class GuestsPage extends StatefulWidget {
 enum Relationship { family, weddingParty, friend, familyFriend }
 
 class _GuestsPageState extends State<GuestsPage> {
+  final singleGuestFormKey = GlobalKey<FormBuilderState>();
+  final coupleGuestFormKey = GlobalKey<FormBuilderState>();
+  final familyGuestFormKey = GlobalKey<FormBuilderState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: WPAppBar(
-        title: 'Guest List',
+        title: 'Guests',
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: DefaultTabController(
-          length: 3,
+          length: 4,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -40,6 +47,7 @@ class _GuestsPageState extends State<GuestsPage> {
                   unselectedLabelColor: AppColours.primary,
                   labelColor: AppColours.pink,
                   tabs: [
+                    Tab(icon: Icon(Icons.list), child: Text('guests')),
                     Tab(
                         icon: Icon(Icons.person_outline),
                         child: Text('single')),
@@ -47,7 +55,7 @@ class _GuestsPageState extends State<GuestsPage> {
                         icon: Icon(Icons.people_outline),
                         child: Text('couple')),
                     Tab(
-                        icon: Icon(Icons.family_restroom_rounded),
+                        icon: Icon(Icons.family_restroom_outlined),
                         child: Text('family')),
                   ],
                 ),
@@ -58,6 +66,7 @@ class _GuestsPageState extends State<GuestsPage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 child: TabBarView(children: [
+                  yourGuests(),
                   singleGuestForm(),
                   coupleGuestForm(),
                   familyGuestForm(),
@@ -72,44 +81,209 @@ class _GuestsPageState extends State<GuestsPage> {
     );
   }
 
-  Widget singleGuestForm() {
-    TextEditingController nameController = TextEditingController();
-    TextEditingController surnameController = TextEditingController();
-    TextEditingController emailController = TextEditingController();
-    TextEditingController cellController = TextEditingController();
-    String dropdownSelection = 'Nothing';
+  Widget yourGuests() {
+    List<GuestModel> guests = [
+      GuestModel(
+          id: '123',
+          name: 'name',
+          email: 'email',
+          cell: 'cell',
+          relationship: Relationship.family.toString(),
+          rsvpStatus: false),
+      GuestModel(
+          id: '123',
+          name: 'name',
+          email: 'email',
+          cell: 'cell',
+          relationship: Relationship.family.toString(),
+          rsvpStatus: false),
+      GuestModel(
+          id: '123',
+          name: 'name',
+          email: 'email',
+          cell: 'cell',
+          relationship: Relationship.family.toString(),
+          rsvpStatus: false),
+    ];
     return ListView(children: [
-      TextFormEntry(
-          hintText: 'Name',
-          keyboardType: TextInputType.name,
-          textController: nameController),
-      TextFormEntry(
-          hintText: 'Surname',
-          keyboardType: TextInputType.name,
-          textController: surnameController),
-      TextFormEntry(
-          hintText: 'Email address',
-          keyboardType: TextInputType.emailAddress,
-          textController: emailController),
-      TextFormEntry(
-          hintText: 'Cell',
-          keyboardType: TextInputType.phone,
-          textController: cellController),
-      const Heading(heading: 'Relationship to you'),
-      const DropdownMenu(),
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: SubmitButton(
+      guest(name: guests.first.name, rsvpStatus: guests.first.rsvpStatus),
+      guest(name: guests.first.name, rsvpStatus: guests.first.rsvpStatus)
+    ]);
+  }
+
+  Widget guest({required String name, required bool rsvpStatus}) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Text(
+          name,
+          style: TextStyle(fontSize: 16),
+        ),
+        Text(
+          rsvpStatus.toString(),
+          style: TextStyle(fontSize: 16),
+        )
+      ],
+    );
+  }
+
+  Widget singleGuestForm() {
+    final guestState = Provider.of<GuestState>(context);
+
+    return SingleChildScrollView(
+        child: FormBuilder(
+      key: singleGuestFormKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: FormBuilderTextField(
+              name: "name",
+              // validators: [FormBuilderValidators.required()],
+              decoration: InputDecoration(
+                  hintText: "Enter your name",
+                  contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                    borderSide:
+                        const BorderSide(color: AppColours.pink, width: 1),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                    borderSide: const BorderSide(
+                      color: AppColours.primary,
+                      width: 1.0,
+                    ),
+                  ),
+                  focusColor: AppColours.pink,
+                  labelStyle: TextStyle(color: AppColours.primary),
+                  labelText: "Name"),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: FormBuilderTextField(
+              name: "surname",
+              // validators: [FormBuilderValidators.required()],
+              decoration: InputDecoration(
+                  hintText: "Enter surname",
+                  contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                    borderSide:
+                        const BorderSide(color: AppColours.pink, width: 1),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                    borderSide: const BorderSide(
+                      color: AppColours.primary,
+                      width: 1.0,
+                    ),
+                  ),
+                  focusColor: AppColours.pink,
+                  labelStyle: TextStyle(color: AppColours.primary),
+                  labelText: "Surname"),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: FormBuilderTextField(
+              name: "email",
+              // validators: [FormBuilderValidators.required(), FormBuilderValidators.email()],
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                  hintText: "Enter your email",
+                  contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                    borderSide:
+                        const BorderSide(color: AppColours.pink, width: 1),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                    borderSide: const BorderSide(
+                      color: AppColours.primary,
+                      width: 1.0,
+                    ),
+                  ),
+                  focusColor: AppColours.pink,
+                  labelStyle: TextStyle(color: AppColours.primary),
+                  labelText: "Email"),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: FormBuilderTextField(
+              name: "cell",
+              // validators: [FormBuilderValidators.required(), FormBuilderValidators.numeric()],
+              decoration: InputDecoration(
+                  hintText: "Enter your cell no",
+                  contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                    borderSide:
+                        const BorderSide(color: AppColours.pink, width: 1),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                    borderSide: const BorderSide(
+                      color: AppColours.primary,
+                      width: 1.0,
+                    ),
+                  ),
+                  focusColor: AppColours.pink,
+                  labelStyle: TextStyle(color: AppColours.primary),
+                  labelText: "Cell No"),
+            ),
+          ),
+          FormBuilderDropdown(
+            name: 'relationship',
+            icon: const Icon(Icons.keyboard_arrow_down_outlined),
+            elevation: 16,
+            style: const TextStyle(color: AppColours.primary),
+            items: <String>[
+              'Select...',
+              'Family',
+              'Wedding Party',
+              'Friend',
+              'Family Friend'
+            ].map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
+          SubmitButton(
             buttonName: 'Submit',
             onPressedFunction: () {
-              GuestService().addGuest(
-                  name: '${nameController.text} ${surnameController.text}',
-                  email: emailController.text,
-                  cell: cellController.text,
-                  relationship: dropdownSelection);
-            }),
-      )
-    ]);
+              singleGuestFormKey.currentState!.save();
+              guestState.addGuests(guests: [
+                GuestModel(
+                    name:
+                        '${singleGuestFormKey.currentState?.fields['name']?.value} ${singleGuestFormKey.currentState?.fields['surname']?.value}',
+                    email:
+                        '${singleGuestFormKey.currentState?.fields['email']?.value}',
+                    cell:
+                        '${singleGuestFormKey.currentState?.fields['cell']?.value}',
+                    relationship:
+                        '${singleGuestFormKey.currentState?.fields['relationship']?.value}',
+                    rsvpStatus: false)
+              ]);
+              singleGuestFormKey.currentState?.reset();
+
+              //Todo add validation that the call actually worked
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text('Guest added successfully'),
+              ));
+            },
+          ),
+        ],
+      ),
+    ));
   }
 
   Widget coupleGuestForm() {

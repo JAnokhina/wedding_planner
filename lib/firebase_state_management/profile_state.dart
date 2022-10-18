@@ -8,11 +8,18 @@ class ProfileState extends ChangeNotifier {
       partner1: Partner(name: '', status: ''),
       partner2: Partner(name: '', status: ''),
       weddingDate: DateTime.now());
+  DateTime _weddingDate = DateTime.now();
 
   ProfileModel get profile => _profile;
+  DateTime get weddingDate => _weddingDate;
 
   set profile(ProfileModel value) {
     _profile = value;
+    notifyListeners();
+  }
+
+  set weddingDate(DateTime value) {
+    _weddingDate = value;
     notifyListeners();
   }
 

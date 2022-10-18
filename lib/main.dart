@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:wedding_planner/firebase_state_management/guest_state.dart';
 import 'package:wedding_planner/firebase_state_management/profile_state.dart';
 import 'package:wedding_planner/firebase_state_management/venue_state.dart';
 import 'package:wedding_planner/themes.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider.value(value: locator<AuthState>()),
           ChangeNotifierProvider<ProfileState>(
               create: (context) => ProfileState()),
+          ChangeNotifierProvider<GuestState>(create: (context) => GuestState()),
           ChangeNotifierProvider<VenueState>(create: (context) => VenueState()),
           Provider<MyRouter>(
             lazy: false,

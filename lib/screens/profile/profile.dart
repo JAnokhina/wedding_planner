@@ -48,7 +48,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     final profileState = Provider.of<ProfileState>(context);
-    DateTime weddingDate = profileState.profile.weddingDate;
+    DateTime weddingDate = profileState.weddingDate;
     ProfileModel profile = profileState.profile;
     print('On page wedding time ${profile.partner1.name}');
     return Focus(
@@ -180,10 +180,10 @@ class _ProfileState extends State<Profile> {
                   Provider.of<ProfileState>(context, listen: false)
                       .editProfileData(ProfileModel(
                           partner1: Partner(
-                              name: '${profile.partner1.name}',
+                              name: profile.partner1.name,
                               status: profile.partner1.status),
                           partner2: Partner(
-                              name: '${profile.partner2.name}',
+                              name: profile.partner2.name,
                               status: profile.partner2.status),
                           weddingDate: weddingDate));
                 } else if (validateName(name1Controller.text) != null ||

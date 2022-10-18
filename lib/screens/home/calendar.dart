@@ -56,7 +56,6 @@ void calendarPopUp(BuildContext context) {
                           buttonName: 'Ok',
                           onPressedFunction: () {
                             Provider.of<ProfileState>(context, listen: false)
-                                .profile
                                 .weddingDate = dateT;
                             Navigator.pop(context);
                           })
