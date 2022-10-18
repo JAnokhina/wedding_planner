@@ -334,7 +334,7 @@ class _GuestsPageState extends State<GuestsPage> {
               }
 
               guestState.addGuestsssss(guests: guestsToAdd);
-              // coupleGuestFormKey.currentState?.reset();
+              coupleGuestFormKey.currentState?.reset();
 
               //Todo add validation that the call actually worked
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -347,18 +347,22 @@ class _GuestsPageState extends State<GuestsPage> {
     ));
   }
 
-  List<Widget> guestForms = [];
+  int familyCount = 1;
   Widget familyGuestForm() {
-    return ListView(
-      children: [
-        guestDetails(1),
-        for (int i = 1; i <= guestForms.length; i++) ...[
-          guestDetails(i + 1),
-        ],
-        TextButton(
-            onPressed: () {
+    final guestState = Provider.of<GuestState>(context);
+
+    return SingleChildScrollView(
+        child: FormBuilder(
+      key: familyGuestFormKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          for (int i = 1; i <= familyCount; i++) dynamicForm(i),
+          InkWell(
+            onTap: () {
               setState(() {
-                guestForms.add(guestDetails(guestForms.length + 1));
+                familyCount++;
               });
             },
             child: Row(
@@ -372,68 +376,167 @@ class _GuestsPageState extends State<GuestsPage> {
                   style: TextStyle(color: AppColours.primary),
                 )
               ],
-            )),
-        if (guestForms.length >= 1) ...[
-          TextButton(
-              onPressed: () {
-                setState(() {
-                  guestForms.removeAt(guestForms.length - 1);
-                });
-              },
-              child: Row(
-                children: const [
-                  Icon(
-                    Icons.remove,
-                    color: AppColours.primary,
-                  ),
-                  Text(
-                    'Remove family member',
-                    style: TextStyle(color: AppColours.primary),
-                  )
-                ],
-              )),
-        ],
-        const Center(
-          child: Heading(heading: 'Relationship to you'),
-        ),
-        const DropdownMenu(),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: SubmitButton(buttonName: 'Submit', onPressedFunction: () {}),
-        )
-      ],
-    );
-  }
+            ),
+          ),
+          if (familyCount >= 2) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    familyCount--;
+                  });
+                },
+                child: Row(
+                  children: const [
+                    Icon(
+                      Icons.remove,
+                      color: AppColours.primary,
+                    ),
+                    Text(
+                      'Remove family member',
+                      style: TextStyle(color: AppColours.primary),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+          FormBuilderDropdown(
+            name: 'relationship',
+            icon: const Icon(Icons.keyboard_arrow_down_outlined),
+            elevation: 16,
+            style: const TextStyle(color: AppColours.primary),
+            items: <String>[
+              'Select...',
+              'Family',
+              'Wedding Party',
+              'Friend',
+              'Family Friend'
+            ].map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
+          SubmitButton(
+            buttonName: 'Submit',
+            onPressedFunction: () {
+              familyGuestFormKey.currentState?.save();
+              List<GuestModel> guestsToAdd = [];
 
-  Widget guestDetails(int guestNumber) {
-    TextEditingController nameController = TextEditingController();
-    TextEditingController surnameController = TextEditingController();
-    TextEditingController emailController = TextEditingController();
-    TextEditingController cellController = TextEditingController();
-    return Column(
-      children: [
-        Heading(heading: 'Person $guestNumber'),
-        TextFormEntry(
-            hintText: 'Name',
-            keyboardType: TextInputType.name,
-            textController: nameController),
-        TextFormEntry(
-          hintText: 'Surname',
-          keyboardType: TextInputType.name,
-          textController: surnameController,
-        ),
-        TextFormEntry(
-          hintText: 'Email address',
-          keyboardType: TextInputType.emailAddress,
-          textController: emailController,
-        ),
-        TextFormEntry(
-            hintText: 'Cell',
-            keyboardType: TextInputType.phone,
-            textController: cellController),
-      ],
-    );
+              for (int i = 1; i <= familyCount; i++) {
+                guestsToAdd.add(GuestModel(
+                    name:
+                        '${familyGuestFormKey.currentState?.fields['name$i']?.value} ${familyGuestFormKey.currentState?.fields['surname$i']?.value}',
+                    email:
+                        '${familyGuestFormKey.currentState?.fields['email$i']?.value}',
+                    cell:
+                        '${familyGuestFormKey.currentState?.fields['cell$i']?.value}',
+                    relationship:
+                        '${familyGuestFormKey.currentState?.fields['relationship']?.value}',
+                    rsvpStatus: false));
+              }
+
+              guestState.addGuestsssss(guests: guestsToAdd);
+              // familyGuestFormKey.currentState?.reset();
+
+              //Todo add validation that the call actually worked
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text('Guest added successfully'),
+              ));
+            },
+          ),
+        ],
+      ),
+    ));
+
+    // return ListView(
+    //   children: [
+    //     guestDetails(1),
+    //     for (int i = 1; i <= guestForms.length; i++) ...[
+    //       guestDetails(i + 1),
+    //     ],
+    //     TextButton(
+    //         onPressed: () {
+    //           setState(() {
+    //             guestForms.add(guestDetails(guestForms.length + 1));
+    //           });
+    //         },
+    //         child: Row(
+    //           children: const [
+    //             Icon(
+    //               Icons.add,
+    //               color: AppColours.primary,
+    //             ),
+    //             Text(
+    //               'Add family member',
+    //               style: TextStyle(color: AppColours.primary),
+    //             )
+    //           ],
+    //         )),
+    //     if (guestForms.length >= 1) ...[
+    //       TextButton(
+    //           onPressed: () {
+    //             setState(() {
+    //               guestForms.removeAt(guestForms.length - 1);
+    //             });
+    //           },
+    //           child: Row(
+    //             children: const [
+    //               Icon(
+    //                 Icons.remove,
+    //                 color: AppColours.primary,
+    //               ),
+    //               Text(
+    //                 'Remove family member',
+    //                 style: TextStyle(color: AppColours.primary),
+    //               )
+    //             ],
+    //           )),
+    //     ],
+    //     const Center(
+    //       child: Heading(heading: 'Relationship to you'),
+    //     ),
+    //     const DropdownMenu(),
+    //     Padding(
+    //       padding: const EdgeInsets.symmetric(vertical: 16),
+    //       child: SubmitButton(buttonName: 'Submit', onPressedFunction: () {}),
+    //     )
+    //   ],
+    // );
   }
+  //
+  // Widget guestDetails(int guestNumber) {
+  //   TextEditingController nameController = TextEditingController();
+  //   TextEditingController surnameController = TextEditingController();
+  //   TextEditingController emailController = TextEditingController();
+  //   TextEditingController cellController = TextEditingController();
+  //   return Column(
+  //     children: [
+  //       Heading(heading: 'Person $guestNumber'),
+  //       TextFormEntry(
+  //           hintText: 'Name',
+  //           keyboardType: TextInputType.name,
+  //           textController: nameController),
+  //       TextFormEntry(
+  //         hintText: 'Surname',
+  //         keyboardType: TextInputType.name,
+  //         textController: surnameController,
+  //       ),
+  //       TextFormEntry(
+  //         hintText: 'Email address',
+  //         keyboardType: TextInputType.emailAddress,
+  //         textController: emailController,
+  //       ),
+  //       TextFormEntry(
+  //           hintText: 'Cell',
+  //           keyboardType: TextInputType.phone,
+  //           textController: cellController),
+  //     ],
+  //   );
+  // }
 
   Widget dynamicForm(int guestNr) {
     return Column(children: [
