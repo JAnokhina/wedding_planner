@@ -43,6 +43,22 @@ class GuestService {
     }
   }
 
+  addGuestsssss({required List<GuestModel> guests}) async {
+    try {
+      await db
+          .collection('users')
+          .doc(_auth.currentUser!.uid)
+          .collection('Guests')
+          .add({
+        for (int i = 0; i < guests.length; i++)
+          'Guest${i + 1}': guests[i].toMap()
+      });
+      // guest.toMap());
+    } catch (e) {
+      print("Failed to add guest: $e");
+    }
+  }
+
   fetchGuests() async {
     List<GuestModel> allGuests = [];
     try {

@@ -16,6 +16,10 @@ class GuestState extends ChangeNotifier {
     await locator<GuestService>().addGuests(guests: guests);
   }
 
+  addGuestsssss({required List<GuestModel> guests}) async {
+    await locator<GuestService>().addGuestsssss(guests: guests);
+  }
+
   refreshAllGuests() async {
     allGuests = await locator<GuestService>().fetchGuests();
   }

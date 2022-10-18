@@ -118,11 +118,11 @@ class _GuestsPageState extends State<GuestsPage> {
       children: [
         Text(
           name,
-          style: TextStyle(fontSize: 16),
+          style: const TextStyle(fontSize: 16),
         ),
         Text(
           rsvpStatus.toString(),
-          style: TextStyle(fontSize: 16),
+          style: const TextStyle(fontSize: 16),
         )
       ],
     );
@@ -144,8 +144,8 @@ class _GuestsPageState extends State<GuestsPage> {
               name: "name",
               // validators: [FormBuilderValidators.required()],
               decoration: InputDecoration(
-                  hintText: "Enter your name",
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                  hintText: "Enter name",
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25.0),
                     borderSide:
@@ -159,7 +159,7 @@ class _GuestsPageState extends State<GuestsPage> {
                     ),
                   ),
                   focusColor: AppColours.pink,
-                  labelStyle: TextStyle(color: AppColours.primary),
+                  labelStyle: const TextStyle(color: AppColours.primary),
                   labelText: "Name"),
             ),
           ),
@@ -170,7 +170,7 @@ class _GuestsPageState extends State<GuestsPage> {
               // validators: [FormBuilderValidators.required()],
               decoration: InputDecoration(
                   hintText: "Enter surname",
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25.0),
                     borderSide:
@@ -184,7 +184,7 @@ class _GuestsPageState extends State<GuestsPage> {
                     ),
                   ),
                   focusColor: AppColours.pink,
-                  labelStyle: TextStyle(color: AppColours.primary),
+                  labelStyle: const TextStyle(color: AppColours.primary),
                   labelText: "Surname"),
             ),
           ),
@@ -196,7 +196,7 @@ class _GuestsPageState extends State<GuestsPage> {
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                   hintText: "Enter your email",
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25.0),
                     borderSide:
@@ -210,7 +210,7 @@ class _GuestsPageState extends State<GuestsPage> {
                     ),
                   ),
                   focusColor: AppColours.pink,
-                  labelStyle: TextStyle(color: AppColours.primary),
+                  labelStyle: const TextStyle(color: AppColours.primary),
                   labelText: "Email"),
             ),
           ),
@@ -221,7 +221,7 @@ class _GuestsPageState extends State<GuestsPage> {
               // validators: [FormBuilderValidators.required(), FormBuilderValidators.numeric()],
               decoration: InputDecoration(
                   hintText: "Enter your cell no",
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25.0),
                     borderSide:
@@ -235,7 +235,7 @@ class _GuestsPageState extends State<GuestsPage> {
                     ),
                   ),
                   focusColor: AppColours.pink,
-                  labelStyle: TextStyle(color: AppColours.primary),
+                  labelStyle: const TextStyle(color: AppColours.primary),
                   labelText: "Cell No"),
             ),
           ),
@@ -287,18 +287,64 @@ class _GuestsPageState extends State<GuestsPage> {
   }
 
   Widget coupleGuestForm() {
-    return ListView(children: [
-      guestDetails(1),
-      guestDetails(2),
-      const Center(
-        child: Heading(heading: 'Relationship to you'),
+    final guestState = Provider.of<GuestState>(context);
+    return SingleChildScrollView(
+        child: FormBuilder(
+      key: coupleGuestFormKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          for (int i = 1; i <= 2; i++) dynamicForm(i),
+          FormBuilderDropdown(
+            name: 'relationship',
+            icon: const Icon(Icons.keyboard_arrow_down_outlined),
+            elevation: 16,
+            style: const TextStyle(color: AppColours.primary),
+            items: <String>[
+              'Select...',
+              'Family',
+              'Wedding Party',
+              'Friend',
+              'Family Friend'
+            ].map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
+          SubmitButton(
+            buttonName: 'Submit',
+            onPressedFunction: () {
+              coupleGuestFormKey.currentState?.save();
+              List<GuestModel> guestsToAdd = [];
+
+              for (int i = 1; i <= 2; i++) {
+                guestsToAdd.add(GuestModel(
+                    name:
+                        '${coupleGuestFormKey.currentState?.fields['name$i']?.value} ${coupleGuestFormKey.currentState?.fields['surname$i']?.value}',
+                    email:
+                        '${coupleGuestFormKey.currentState?.fields['email$i']?.value}',
+                    cell:
+                        '${coupleGuestFormKey.currentState?.fields['cell$i']?.value}',
+                    relationship:
+                        '${coupleGuestFormKey.currentState?.fields['relationship']?.value}',
+                    rsvpStatus: false));
+              }
+
+              guestState.addGuestsssss(guests: guestsToAdd);
+              // coupleGuestFormKey.currentState?.reset();
+
+              //Todo add validation that the call actually worked
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text('Guest added successfully'),
+              ));
+            },
+          ),
+        ],
       ),
-      const DropdownMenu(),
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: SubmitButton(buttonName: 'Submit', onPressedFunction: () {}),
-      )
-    ]);
+    ));
   }
 
   List<Widget> guestForms = [];
@@ -387,5 +433,108 @@ class _GuestsPageState extends State<GuestsPage> {
             textController: cellController),
       ],
     );
+  }
+
+  Widget dynamicForm(int guestNr) {
+    return Column(children: [
+      Heading(heading: 'Person $guestNr'),
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: FormBuilderTextField(
+          name: "name$guestNr",
+          // validators: [FormBuilderValidators.required()],
+          decoration: InputDecoration(
+              hintText: "Enter name",
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: const BorderSide(color: AppColours.pink, width: 1),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: const BorderSide(
+                  color: AppColours.primary,
+                  width: 1.0,
+                ),
+              ),
+              focusColor: AppColours.pink,
+              labelStyle: const TextStyle(color: AppColours.primary),
+              labelText: "Name"),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: FormBuilderTextField(
+          name: "surname$guestNr",
+          // validators: [FormBuilderValidators.required()],
+          decoration: InputDecoration(
+              hintText: "Enter surname",
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: const BorderSide(color: AppColours.pink, width: 1),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: const BorderSide(
+                  color: AppColours.primary,
+                  width: 1.0,
+                ),
+              ),
+              focusColor: AppColours.pink,
+              labelStyle: const TextStyle(color: AppColours.primary),
+              labelText: "Surname"),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: FormBuilderTextField(
+          name: "email$guestNr",
+          // validators: [FormBuilderValidators.required(), FormBuilderValidators.email()],
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+              hintText: "Enter your email",
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: const BorderSide(color: AppColours.pink, width: 1),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: const BorderSide(
+                  color: AppColours.primary,
+                  width: 1.0,
+                ),
+              ),
+              focusColor: AppColours.pink,
+              labelStyle: const TextStyle(color: AppColours.primary),
+              labelText: "Email"),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: FormBuilderTextField(
+          name: "cell$guestNr",
+          // validators: [FormBuilderValidators.required(), FormBuilderValidators.numeric()],
+          decoration: InputDecoration(
+              hintText: "Enter your cell no",
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: const BorderSide(color: AppColours.pink, width: 1),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25.0),
+                borderSide: const BorderSide(
+                  color: AppColours.primary,
+                  width: 1.0,
+                ),
+              ),
+              focusColor: AppColours.pink,
+              labelStyle: const TextStyle(color: AppColours.primary),
+              labelText: "Cell No"),
+        ),
+      ),
+    ]);
   }
 }
