@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 import 'package:wedding_planner/firebase_models/guest_model.dart';
 import 'package:wedding_planner/firebase_state_management/guest_state.dart';
 import 'package:wedding_planner/main.dart';
@@ -128,19 +129,58 @@ class _GuestsPageState extends State<GuestsPage> {
   }
 
   Widget guest({required String name, required bool rsvpStatus}) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Text(
-          name,
-          style: const TextStyle(fontSize: 16),
-        ),
-        Text(
-          rsvpStatus.toString(),
-          style: const TextStyle(fontSize: 16),
-        )
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            name,
+            style: const TextStyle(fontSize: 16),
+          ),
+          ToggleSwitch(
+            activeBorders: [
+              Border.all(
+                color: Colors.lightGreen,
+                width: 3.0,
+              ),
+              Border.all(
+                color: Colors.red,
+                width: 3.0,
+              ),
+              // Border.all(
+              //   color: Colors.deepOrangeAccent,
+              //   width: 3.0,
+              // ),
+              // Border.all(
+              //   color: Colors.blue.shade500,
+              //   width: 3.0,
+              // ),
+            ],
+            activeFgColor: Theme.of(context).scaffoldBackgroundColor,
+            isVertical: true,
+            minWidth: 150.0,
+            radiusStyle: true,
+            cornerRadius: 20.0,
+            initialLabelIndex: 2,
+            activeBgColors: [
+              [Colors.green.withOpacity(0.2)],
+              [Colors.red.withOpacity(0.2)],
+              // [Colors.orange],
+              // [Colors.lightBlueAccent]
+            ],
+            labels: ['Accepted', 'Declined'],
+            onToggle: (index) {
+              print('switched to: $index');
+            },
+          ),
+          // Text(
+          //   rsvpStatus.toString(),
+          //   style: const TextStyle(fontSize: 16),
+          // )
+        ],
+      ),
     );
   }
 

@@ -55,6 +55,7 @@ dependencies:
   provider: ^6.0.3
   settings_ui: ^2.0.2
   syncfusion_flutter_datepicker: ^20.2.39
+  toggle_switch: ^2.0.1
   url_launcher: ^6.1.6
 
 dev_dependencies:
