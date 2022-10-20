@@ -51,6 +51,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "110031330317-4dko4v78s7v736l7k8rpunrvd6kn9036.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.juliaanokhina.wedding_planner",
+            "certificate_hash": "15945ecd357cb46eed4b492600db5b7f2bdcb7c7"
+          }
+        },
+        {
           "client_id": "110031330317-ulfn50vpoo648j5p0m7gmtv5h9cor0kh.apps.googleusercontent.com",
           "client_type": 3
         }

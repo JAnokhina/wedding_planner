@@ -1,7 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server/gmail.dart';
 import 'package:wedding_planner/firebase_models/guest_model.dart';
+
+import 'google_auth_service.dart';
 
 class GuestService {
   FirebaseFirestore db = FirebaseFirestore.instance;
@@ -102,5 +107,57 @@ class GuestService {
       print('Failed to fetch guests. Error: $e');
     }
     return guestLists.toList();
+  }
+
+  sendEmails() async {
+    final user = await GoogleAuthApi.signIn();
+    if (user == null) return;
+
+    final myEmail = user.email;
+
+    final auth = await user.authentication;
+
+    final token = auth.accessToken!;
+
+    final smtpServer = gmailSaslXoauth2(myEmail, token);
+
+    // Creating the Gmail server
+
+    // Create our email message.
+
+    final message = Message()
+      ..from = Address(myEmail, 'Julia')
+      ..recipients = [myEmail] //recipent email
+
+      // ..ccRecipients.addAll(['destCc1@example.com', 'destCc2@example.com']) //cc Recipents emails
+      //
+      // ..bccRecipients.add(Address('bccAddress@example.com')) //bcc Recipents emails
+
+      ..subject =
+          'Test Dart Mailer library :: 😀 :: ${DateTime.now()}' //subject of the email
+      ..text =
+          'This is the plain text.\nThis is line 2 of the text part.'; //body of the email
+
+    try {
+      final sendReport = await send(message, smtpServer);
+
+      print('Message sent: ' +
+          sendReport.toString()); //print if the email is sent
+      return showSnackBar('Emails sent successfully!');
+    } on MailerException catch (e) {
+      print('Message not sent. \n' +
+          e.toString()); //print if the email is not sent
+
+      // e.toString() will show why the email is not sending
+
+    }
+  }
+
+  void showSnackBar(String text) {
+    final snackBar = SnackBar(
+        content: Text(
+      text,
+      style: TextStyle(fontSize: 20),
+    ));
   }
 }

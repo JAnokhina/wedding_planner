@@ -3,6 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:provider/provider.dart';
 import 'package:wedding_planner/firebase_models/guest_model.dart';
+import 'package:wedding_planner/firebase_services/guest_service.dart';
 import 'package:wedding_planner/firebase_state_management/guest_state.dart';
 import 'package:wedding_planner/main.dart';
 import 'package:wedding_planner/themes.dart';
@@ -99,6 +100,17 @@ class _GuestsPageState extends State<GuestsPage> {
           ),
         ),
       ),
+      // bottomSheet: InkWell(
+      //   onTap: () async {
+      //     await GuestService().sendEmails();
+      //   },
+      //   child: Container(
+      //     width: displayWidth(context),
+      //     height: 60,
+      //     color: Colors.lightBlueAccent,
+      //     child: Text('Send emails'),
+      //   ),
+      // ),
       extendBody: true,
       // bottomNavigationBar: const BottomNavBar(currentIndex: 2),
     );
@@ -139,9 +151,28 @@ class _GuestsPageState extends State<GuestsPage> {
       // for (var guest in guests) ...[
       //   guestWidget(name: guest.name, rsvpStatus: guest.rsvpStatus)
       // ]
+      Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: const [
+          Text(
+            'Guests',
+            style: TextStyle(
+                fontSize: 16,
+                color: AppColours.primary,
+                fontWeight: FontWeight.bold),
+          ),
+          Text(
+            'RSVP status',
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: AppColours.primary),
+          )
+        ],
+      ),
       for (var guestGroup in guests) ...[
         for (var guest in guestGroup.guestList) ...[
-          Text('guest Id:: ${guest.id}'),
           guestWidget(
               name: guest.name,
               rsvpStatus: guest.rsvpStatus,

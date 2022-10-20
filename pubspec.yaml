@@ -49,9 +49,11 @@ dependencies:
   geocoding: ^2.0.5
   geolocator: ^9.0.2
   google_maps_flutter: ^2.2.1
+  google_sign_in: ^5.4.2
   go_router: ^4.1.0
   http: ^0.13.5
   intl: ^0.17.0
+  mailer: ^5.2.0
   map_launcher: ^2.4.0
   provider: ^6.0.3
   settings_ui: ^2.0.2
