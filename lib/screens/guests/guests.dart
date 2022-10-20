@@ -171,6 +171,7 @@ class _GuestsPageState extends State<GuestsPage> {
           )
         ],
       ),
+      Divider(),
       for (var guestGroup in guests) ...[
         for (var guest in guestGroup.guestList) ...[
           guestWidget(
