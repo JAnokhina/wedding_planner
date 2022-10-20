@@ -43,6 +43,7 @@ dependencies:
   flutter_google_places: ^0.3.0
   flutter_rating_bar: ^4.0.1
   flutter_svg: ^1.1.1+1
+  flutter_switch: ^0.3.2
   full_screen_image_null_safe: ^2.0.0
   get_it: ^7.2.0
   geocoding: ^2.0.5
@@ -55,7 +56,6 @@ dependencies:
   provider: ^6.0.3
   settings_ui: ^2.0.2
   syncfusion_flutter_datepicker: ^20.2.39
-  toggle_switch: ^2.0.1
   url_launcher: ^6.1.6
 
 dev_dependencies:

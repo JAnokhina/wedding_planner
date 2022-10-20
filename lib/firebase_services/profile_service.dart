@@ -11,8 +11,6 @@ class ProfileService {
       db
           .collection('users')
           .doc(_auth.currentUser!.uid)
-          // .collection('Profile')
-          // .doc('Wedding Date')
           .set(profileData.createMap(), SetOptions(merge: true))
           .catchError((error) => print("Failed to merge Profile data: $error"));
     } catch (e) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:provider/provider.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 import 'package:wedding_planner/firebase_models/guest_model.dart';
 import 'package:wedding_planner/firebase_state_management/guest_state.dart';
 import 'package:wedding_planner/main.dart';
@@ -23,6 +23,12 @@ class _GuestsPageState extends State<GuestsPage> {
   final singleGuestFormKey = GlobalKey<FormBuilderState>();
   final coupleGuestFormKey = GlobalKey<FormBuilderState>();
   final familyGuestFormKey = GlobalKey<FormBuilderState>();
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<GuestState>(context, listen: false).refreshAllGuests();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,36 +105,61 @@ class _GuestsPageState extends State<GuestsPage> {
   }
 
   Widget yourGuests() {
-    List<GuestModel> guests = [
-      GuestModel(
-          id: '123',
-          name: 'name',
-          email: 'email',
-          cell: 'cell',
-          relationship: Relationship.family.toString(),
-          rsvpStatus: false),
-      GuestModel(
-          id: '123',
-          name: 'name',
-          email: 'email',
-          cell: 'cell',
-          relationship: Relationship.family.toString(),
-          rsvpStatus: false),
-      GuestModel(
-          id: '123',
-          name: 'name',
-          email: 'email',
-          cell: 'cell',
-          relationship: Relationship.family.toString(),
-          rsvpStatus: false),
+    final guestState = Provider.of<GuestState>(context);
+    List<GuestListsModel> guests = [];
+
+    if (guestState.allGuests.isNotEmpty) {
+      guests = guestState.allGuests;
+    }
+
+    // guests.forEach((element) {(element.guestList.forEach((element) {print(element);}));});
+
+    List<GuestModel> guestsFake = [
+      // GuestModel(
+      //     name: 'name',
+      //     email: 'email',
+      //     cell: 'cell',
+      //     relationship: Relationship.family.toString(),
+      //     rsvpStatus: false),
+      // GuestModel(
+      //     name: 'name',
+      //     email: 'email',
+      //     cell: 'cell',
+      //     relationship: Relationship.family.toString(),
+      //     rsvpStatus: false),
+      // GuestModel(
+      //     name: 'name',
+      //     email: 'email',
+      //     cell: 'cell',
+      //     relationship: Relationship.family.toString(),
+      //     rsvpStatus: false),
     ];
+
     return ListView(children: [
-      guest(name: guests.first.name, rsvpStatus: guests.first.rsvpStatus),
-      guest(name: guests.first.name, rsvpStatus: guests.first.rsvpStatus)
+      // for (var guest in guests) ...[
+      //   guestWidget(name: guest.name, rsvpStatus: guest.rsvpStatus)
+      // ]
+      for (var guestGroup in guests) ...[
+        for (var guest in guestGroup.guestList) ...[
+          Text('guest Id:: ${guest.id}'),
+          guestWidget(
+              name: guest.name,
+              rsvpStatus: guest.rsvpStatus,
+              guestId: guest.id,
+              guestKey: guest.key,
+              docId: guestGroup.id)
+        ]
+      ]
     ]);
   }
 
-  Widget guest({required String name, required bool rsvpStatus}) {
+  Widget guestWidget(
+      {required String name,
+      required bool rsvpStatus,
+      required String guestId,
+      required String guestKey,
+      required String docId}) {
+    final guestState = Provider.of<GuestState>(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
@@ -139,46 +170,24 @@ class _GuestsPageState extends State<GuestsPage> {
             name,
             style: const TextStyle(fontSize: 16),
           ),
-          ToggleSwitch(
-            activeBorders: [
-              Border.all(
-                color: Colors.lightGreen,
-                width: 3.0,
-              ),
-              Border.all(
-                color: Colors.red,
-                width: 3.0,
-              ),
-              // Border.all(
-              //   color: Colors.deepOrangeAccent,
-              //   width: 3.0,
-              // ),
-              // Border.all(
-              //   color: Colors.blue.shade500,
-              //   width: 3.0,
-              // ),
-            ],
-            activeFgColor: Theme.of(context).scaffoldBackgroundColor,
-            isVertical: true,
-            minWidth: 150.0,
-            radiusStyle: true,
-            cornerRadius: 20.0,
-            initialLabelIndex: 2,
-            activeBgColors: [
-              [Colors.green.withOpacity(0.2)],
-              [Colors.red.withOpacity(0.2)],
-              // [Colors.orange],
-              // [Colors.lightBlueAccent]
-            ],
-            labels: ['Accepted', 'Declined'],
-            onToggle: (index) {
-              print('switched to: $index');
+          FlutterSwitch(
+            width: 100,
+            height: 40,
+            toggleSize: 30,
+            value: rsvpStatus,
+            onToggle: (value) {
+              setState(() {
+                guestState.setGuestRsvp(
+                    docId: docId,
+                    status: value,
+                    guestId: guestId,
+                    guestKey: guestKey);
+                guestState.refreshAllGuests();
+                print('Changed:: $value');
+              });
             },
+            activeColor: Colors.green,
           ),
-          // Text(
-          //   rsvpStatus.toString(),
-          //   style: const TextStyle(fontSize: 16),
-          // )
         ],
       ),
     );
@@ -319,6 +328,7 @@ class _GuestsPageState extends State<GuestsPage> {
               singleGuestFormKey.currentState!.save();
               guestState.addGuests(guests: [
                 GuestModel(
+                    id: DateTime.now().microsecondsSinceEpoch.toString(),
                     name:
                         '${singleGuestFormKey.currentState?.fields['name']?.value} ${singleGuestFormKey.currentState?.fields['surname']?.value}',
                     email:
@@ -378,6 +388,7 @@ class _GuestsPageState extends State<GuestsPage> {
 
               for (int i = 1; i <= 2; i++) {
                 guestsToAdd.add(GuestModel(
+                    id: DateTime.now().microsecondsSinceEpoch.toString(),
                     name:
                         '${coupleGuestFormKey.currentState?.fields['name$i']?.value} ${coupleGuestFormKey.currentState?.fields['surname$i']?.value}',
                     email:
@@ -484,6 +495,7 @@ class _GuestsPageState extends State<GuestsPage> {
 
               for (int i = 1; i <= familyCount; i++) {
                 guestsToAdd.add(GuestModel(
+                    id: DateTime.now().microsecondsSinceEpoch.toString(),
                     name:
                         '${familyGuestFormKey.currentState?.fields['name$i']?.value} ${familyGuestFormKey.currentState?.fields['surname$i']?.value}',
                     email:
