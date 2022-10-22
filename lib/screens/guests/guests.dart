@@ -48,33 +48,43 @@ class _GuestsPageState extends State<GuestsPage> {
               SizedBox(
                 width: displayWidth(context),
                 height: displayHeight(context) * 0.12,
-                child: const TabBar(
+                child: TabBar(
                   indicatorColor: AppColours.pink,
                   unselectedLabelColor: AppColours.primary,
                   labelColor: AppColours.pink,
                   tabs: [
                     Tab(
-                        icon: Icon(Icons.list),
-                        child: Center(
-                            child: Text(
-                          'guests',
-                          textAlign: TextAlign.center,
-                        ))),
-                    Tab(
+                        icon: const Icon(Icons.list),
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              Provider.of<GuestState>(
+                                context,
+                              ).refreshAllGuests();
+                              // yourGuests();
+                            });
+                          },
+                          child: const Center(
+                              child: Text(
+                            'guests',
+                            textAlign: TextAlign.center,
+                          )),
+                        )),
+                    const Tab(
                         icon: Icon(Icons.person_outline),
                         child: Center(
                             child: Text(
                           'add single',
                           textAlign: TextAlign.center,
                         ))),
-                    Tab(
+                    const Tab(
                         icon: Icon(Icons.people_outline),
                         child: Center(
                             child: Text(
                           'add couple',
                           textAlign: TextAlign.center,
                         ))),
-                    Tab(
+                    const Tab(
                         icon: Icon(Icons.family_restroom_outlined),
                         child: Center(
                             child: Text(
@@ -117,52 +127,44 @@ class _GuestsPageState extends State<GuestsPage> {
   }
 
   Widget yourGuests() {
-    final guestState = Provider.of<GuestState>(context);
+    final guestState = Provider.of<GuestState>(context, listen: true);
     List<GuestListsModel> guests = [];
+    List<GuestModel> guestList = [];
 
     if (guestState.allGuests.isNotEmpty) {
       guests = guestState.allGuests;
     }
 
-    // guests.forEach((element) {(element.guestList.forEach((element) {print(element);}));});
+    for (var guestGroup in guests) {
+      for (var guest in guestGroup.guestList) {
+        guestList.add(guest);
+      }
+    }
 
-    List<GuestModel> guestsFake = [
-      // GuestModel(
-      //     name: 'name',
-      //     email: 'email',
-      //     cell: 'cell',
-      //     relationship: Relationship.family.toString(),
-      //     rsvpStatus: false),
-      // GuestModel(
-      //     name: 'name',
-      //     email: 'email',
-      //     cell: 'cell',
-      //     relationship: Relationship.family.toString(),
-      //     rsvpStatus: false),
-      // GuestModel(
-      //     name: 'name',
-      //     email: 'email',
-      //     cell: 'cell',
-      //     relationship: Relationship.family.toString(),
-      //     rsvpStatus: false),
-    ];
+    List<GuestModel> yesGuests = [];
+    List<GuestModel> noGuests = [];
+
+    for (var guest in guestList) {
+      if (guest.rsvpStatus) {
+        yesGuests.add(guest);
+      } else {
+        noGuests.add(guest);
+      }
+    }
 
     return ListView(children: [
-      // for (var guest in guests) ...[
-      //   guestWidget(name: guest.name, rsvpStatus: guest.rsvpStatus)
-      // ]
       Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
+        children: [
           Text(
-            'Guests',
-            style: TextStyle(
+            'Guests (${guestList.length})',
+            style: const TextStyle(
                 fontSize: 16,
                 color: AppColours.primary,
                 fontWeight: FontWeight.bold),
           ),
-          Text(
+          const Text(
             'RSVP status',
             style: TextStyle(
                 fontSize: 16,
@@ -171,7 +173,49 @@ class _GuestsPageState extends State<GuestsPage> {
           )
         ],
       ),
-      Divider(),
+      const Divider(),
+      Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Row(
+            children: [
+              const Text(
+                'Yes: ',
+                style: TextStyle(
+                    fontSize: 16,
+                    color: AppColours.primary,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                '${yesGuests.length} ',
+                style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              const Text(
+                '| No: ',
+                style: TextStyle(
+                    fontSize: 16,
+                    color: AppColours.primary,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                '${noGuests.length}',
+                style: const TextStyle(
+                    fontSize: 16,
+                    color: AppColours.secondary,
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ],
+      ),
       for (var guestGroup in guests) ...[
         for (var guest in guestGroup.guestList) ...[
           guestWidget(
@@ -191,7 +235,9 @@ class _GuestsPageState extends State<GuestsPage> {
       required String guestId,
       required String guestKey,
       required String docId}) {
-    final guestState = Provider.of<GuestState>(context);
+    final guestState = Provider.of<GuestState>(
+      context,
+    );
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
@@ -215,6 +261,7 @@ class _GuestsPageState extends State<GuestsPage> {
                     guestId: guestId,
                     guestKey: guestKey);
                 guestState.refreshAllGuests();
+                // yourGuests();
                 print('Changed:: $value');
               });
             },
@@ -358,7 +405,7 @@ class _GuestsPageState extends State<GuestsPage> {
             buttonName: 'Submit',
             onPressedFunction: () {
               singleGuestFormKey.currentState!.save();
-              guestState.addGuests(guests: [
+              guestState.addGuestsssss(guests: [
                 GuestModel(
                     id: DateTime.now().microsecondsSinceEpoch.toString(),
                     name:
@@ -372,7 +419,7 @@ class _GuestsPageState extends State<GuestsPage> {
                     rsvpStatus: false)
               ]);
               singleGuestFormKey.currentState?.reset();
-
+              guestState.refreshAllGuests();
               //Todo add validation that the call actually worked
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 content: Text('Guest added successfully'),
@@ -433,6 +480,7 @@ class _GuestsPageState extends State<GuestsPage> {
               }
 
               guestState.addGuestsssss(guests: guestsToAdd);
+              guestState.refreshAllGuests();
               coupleGuestFormKey.currentState?.reset();
 
               //Todo add validation that the call actually worked
@@ -540,7 +588,8 @@ class _GuestsPageState extends State<GuestsPage> {
               }
 
               guestState.addGuestsssss(guests: guestsToAdd);
-              // familyGuestFormKey.currentState?.reset();
+              familyGuestFormKey.currentState?.reset();
+              guestState.refreshAllGuests();
 
               //Todo add validation that the call actually worked
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
