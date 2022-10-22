@@ -8,6 +8,19 @@ class AppColours {
   static const Color secondary = Color(0xFFB2BCC1);
 }
 
+List<Color> pieChartColors = [
+  Color(0xFF180107),
+  Color(0xFF490314),
+  Color(0xFF7a0622),
+  Color(0xFFaa082f),
+  Color(0xFFdb0a3d),
+  Color(0xFFf52456),
+  Color(0xFFf7557c),
+  Color(0xFFf985a1),
+  Color(0xFFfcb6c7),
+  Color(0xFFfee7ec),
+];
+
 class Themes {
   static ThemeData lightTheme = ThemeData(
       brightness: Brightness.light,

@@ -30,9 +30,4 @@ class ProfileState extends ChangeNotifier {
   refreshProfileData() async {
     profile = await locator<ProfileService>().getProfileData();
   }
-
-  // refreshWeddingDate() async {
-  //   weddingDate = await locator<ProfileService>().getWeddingDate();
-  //   print('State time: $weddingDate');
-  // }
 }

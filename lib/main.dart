@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:wedding_planner/firebase_state_management/guest_state.dart';
 import 'package:wedding_planner/firebase_state_management/profile_state.dart';
 import 'package:wedding_planner/firebase_state_management/venue_state.dart';
+import 'package:wedding_planner/firebase_state_management/budget_state.dart';
 import 'package:wedding_planner/themes.dart';
 
 import 'controller/router.dart';
@@ -30,6 +31,8 @@ class MyApp extends StatelessWidget {
               create: (context) => ProfileState()),
           ChangeNotifierProvider<GuestState>(create: (context) => GuestState()),
           ChangeNotifierProvider<VenueState>(create: (context) => VenueState()),
+          ChangeNotifierProvider<BudgetState>(
+              create: (context) => BudgetState()),
           Provider<MyRouter>(
             lazy: false,
             create: (BuildContext createContext) => MyRouter(),

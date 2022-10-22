@@ -29,7 +29,6 @@ class ProfileService {
           .doc(_auth.currentUser!.uid)
           .get()
           .then((doc) => {
-                // profile = ProfileModel.fromMap(doc.data()!),
                 profile = ProfileModel.fromMap(doc.data()!),
               });
       return profile;
