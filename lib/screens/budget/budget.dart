@@ -5,10 +5,8 @@ import 'package:wedding_planner/firebase_models/budget_model.dart';
 import 'package:wedding_planner/themes.dart';
 import 'package:wedding_planner/widgets/app_bar.dart';
 import 'package:wedding_planner/widgets/submit_button.dart';
-import 'package:wedding_planner/widgets/text_form_entry.dart';
 import '../../firebase_state_management/budget_state.dart';
 import '../../main.dart';
-import '../../widgets/text_buttom_custom.dart';
 
 class Budget extends StatefulWidget {
   const Budget({Key? key}) : super(key: key);
@@ -33,11 +31,6 @@ class _BudgetState extends State<Budget> {
   }
 
   bool editClicked = false;
-  // (Provider.of<BudgetState>(context, listen: false) == 0)
-  //  ? editClicked = true
-  // :else
-  //   editClicked = false;
-  //
   @override
   Widget build(BuildContext context) {
     final budgetState = Provider.of<BudgetState>(context);
