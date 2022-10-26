@@ -30,7 +30,8 @@
    <application
         android:label="wedding_planner"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:roundIcon = "@mipmap/wp_launcher"
+        android:icon="@mipmap/wp_launcher">
 
        <meta-data android:name="com.google.android.maps.v2.API_KEY"
            android:value="AIzaSyAKj3hHX5bDqPyrTdFfPp6GqiqfzDUHgMo"/>
