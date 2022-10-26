@@ -92,7 +92,7 @@ class _BudgetState extends State<Budget> {
                                   //   }
                                   //   return null;
                                 },
-                                readOnly: !editClicked,
+                                readOnly: editClicked,
                                 decoration: InputDecoration(
                                   hintText: (budget.total == 0)
                                       ? 'Enter your total budget'

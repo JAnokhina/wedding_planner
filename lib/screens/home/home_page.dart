@@ -120,39 +120,39 @@ class _HomePageState extends State<HomePage> {
       Icons.location_on_outlined,
       Icons.attach_money,
       Icons.email_outlined,
-      Icons.checklist_rounded,
-      Icons.house_outlined,
-      Icons.note_add_outlined,
-      Icons.photo_size_select_actual_outlined,
-      Icons.settings,
+      // Icons.checklist_rounded,
+      // Icons.house_outlined,
+      // Icons.note_add_outlined,
+      // Icons.photo_size_select_actual_outlined,
+      // Icons.settings,
       Icons.perm_identity_outlined
     ];
     List<String> itemNames = [
-      'Venue',
+      'Venues',
       'Budget',
       'Guests',
-      'I-Do\'s',
-      'Vendors',
-      'Notes',
-      'Ideas',
-      'Settings',
+      // 'I-Do\'s',
+      // 'Vendors',
+      // 'Notes',
+      // 'Ideas',
+      // 'Settings',
       'Profile'
     ];
     List<String> navigateToRoute = [
       '/venue',
       '/budget',
       '/guests',
-      '/to-dos',
-      '/vendors',
-      '/notes',
-      '/ideas',
-      '/settings',
+      // '/to-dos',
+      // '/vendors',
+      // '/notes',
+      // '/ideas',
+      // '/settings',
       '/profile'
     ];
 
     return GridView.count(
       crossAxisCount: 3,
-      children: List.generate(9, (index) {
+      children: List.generate(4, (index) {
         return InkWell(
           onTap: () {
             context.push(navigateToRoute[index]);

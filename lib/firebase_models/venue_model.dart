@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class VenueModel {
@@ -8,6 +9,7 @@ class VenueModel {
   String web;
   int maxGuests;
   double rating;
+  int pricepp;
   LatLng latLng;
   Address address;
   List<dynamic> photos;
@@ -22,6 +24,7 @@ class VenueModel {
     required this.latLng,
     required this.rating,
     required this.address,
+    required this.pricepp,
     required this.photos,
   });
 
@@ -33,12 +36,29 @@ class VenueModel {
         web = firestoreMap['web'] ?? '',
         maxGuests = firestoreMap['maxGuests'] ?? 0,
         rating = firestoreMap['rating'] ?? 0,
+        pricepp = firestoreMap['pricepp'] ?? 0,
         photos = firestoreMap['photos'].map((e) => e.toString()).toList(),
         latLng = LatLng(
           firestoreMap['latLong'].latitude,
           firestoreMap['latLong'].longitude,
         ),
         address = Address.fromMap(firestoreMap['address']);
+
+  Map<String, dynamic> createMap() {
+    return {
+      if (name.isNotEmpty) 'name': name,
+      if (cell.isNotEmpty) 'cell': cell,
+      if (email.isNotEmpty) 'email': email,
+      if (web.isNotEmpty) 'web': web,
+      if (maxGuests != 0) 'maxGuests': maxGuests,
+      if (rating != 0) 'rating': rating,
+      if (pricepp != 0) 'pricepp': pricepp,
+      if (photos.isNotEmpty) 'photos': photos,
+      if (latLng.latitude != 0 && latLng.longitude != 0)
+        'latLong': GeoPoint(latLng.latitude, latLng.longitude),
+      'address': address.createMap(),
+    };
+  }
 }
 
 class Address {
@@ -56,6 +76,14 @@ class Address {
       : street = firestoreMap['street'],
         city = firestoreMap['city'],
         postalCode = firestoreMap['postalCode'];
+
+  Map<String, dynamic> createMap() {
+    return {
+      if (street.isNotEmpty) 'street': street,
+      if (city.isNotEmpty) 'city': city,
+      if (postalCode.isNotEmpty) 'postalCode': postalCode,
+    };
+  }
 }
 
 class SuggestionModel {

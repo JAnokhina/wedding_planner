@@ -19,15 +19,20 @@ class VenuesService {
   getVenues() async {
     List<VenueModel> allVenues = [];
     try {
-      allVenues = await db
-          .collection('users')
-          .doc(_auth.currentUser!.uid)
-          .collection('Venues')
-          .get()
-          .then((docs) {
+      allVenues = await db.collection('venues').get().then((docs) {
         for (var doc in docs.docs) {
           allVenues.add(VenueModel.fromMap(doc.data(), doc.id));
         }
+
+        // for (var doc in allVenues.toList()) {
+        //   db
+        //       .collection('venues')
+        //       .doc(doc.id)
+        //       .set(doc.createMap(), SetOptions(merge: true))
+        //       .catchError(
+        //           (error) => print("Failed to merge Profile data: $error"));
+        // }
+
         return allVenues.toList();
       });
       return allVenues.toList();
