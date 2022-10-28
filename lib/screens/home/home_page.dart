@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:wedding_planner/firebase_state_management/auth_state.dart';
 import 'package:wedding_planner/firebase_state_management/profile_state.dart';
 import 'package:wedding_planner/screens/home/calendar.dart';
 import 'package:wedding_planner/widgets/gridItem.dart';
@@ -22,12 +24,28 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     Provider.of<ProfileState>(context, listen: false).refreshProfileData();
+    final currentUser = (FirebaseAuth.instance.currentUser);
+    // if (currentUser != null && !currentUser.emailVerified) {
+    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //     content: Text(
+    //         'Please verify your email address. The verification address might be in your SPAM folder.'),
+    //   ));
+    // }
+    // context.push('/profile');
   }
 
   @override
   Widget build(BuildContext context) {
     final profileState = Provider.of<ProfileState>(context);
     DateTime weddingDate = profileState.profile.weddingDate;
+    // final currentUser = (FirebaseAuth.instance.currentUser);
+    // if (currentUser != null && !currentUser.emailVerified) {
+    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //     content: Text(
+    //         'Please verify your email address. The verification address might be in your SPAM folder.'),
+    //   ));
+    // }
+    // context.push('/profile');
 
     return Scaffold(
       appBar: WPAppBar(
@@ -112,6 +130,12 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+      // bottomNavigationBar:  (currentUser != null && !currentUser.emailVerified)
+      // ? ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      //   content: Text(
+      //       'Please verif your email address. The verification address might be in your SPAM folder.'),
+      // )) : Cont
+      //
     );
   }
 

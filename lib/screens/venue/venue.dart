@@ -5,6 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
 import 'dart:ui' as ui;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:label_marker/label_marker.dart';
 import 'package:map_launcher/map_launcher.dart' as mapLaunch;
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -240,7 +241,7 @@ class _VenueState extends State<Venue> {
                 builder: (context) {
                   return Container(
                     width: displayWidth(context),
-                    height: displayHeight(context) * 0.65,
+                    height: displayHeight(context) * 0.7,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 16),
                     child: Column(
@@ -266,7 +267,7 @@ class _VenueState extends State<Venue> {
                         ),
                         SizedBox(
                           width: displayWidth(context),
-                          height: displayHeight(context) * 0.5 + 40,
+                          height: displayHeight(context) * 0.6,
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
@@ -399,6 +400,11 @@ class _VenueState extends State<Venue> {
                                       itemSize: 25,
                                       direction: Axis.horizontal,
                                     ),
+                                    Text(
+                                      '   (${venue.rating.toString()})',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
                                   ],
                                 ),
                               ),
@@ -406,7 +412,7 @@ class _VenueState extends State<Venue> {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   const Text(
-                                    'Max guest   capacity: ',
+                                    'Max guest capacity: ',
                                   ),
                                   Text(
                                     venue.maxGuests.toString(),
@@ -414,6 +420,22 @@ class _VenueState extends State<Venue> {
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                 ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    const Text(
+                                      'Average price per person: ',
+                                    ),
+                                    Text(
+                                      'R ${venue.pricepp.toString()}',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
                               ),
                               Padding(
                                 padding:

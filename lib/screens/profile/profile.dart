@@ -51,6 +51,7 @@ class _ProfileState extends State<Profile> {
     DateTime weddingDate = profileState.weddingDate;
     ProfileModel profile = profileState.profile;
     print('On page wedding time ${profile.partner1.name}');
+
     return Focus(
       onFocusChange: (hasFocus) {
         if (hasFocus) {
@@ -151,12 +152,12 @@ class _ProfileState extends State<Profile> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: SubmitButton(
               buttonName: 'Save',
-              onPressedFunction: () {
+              onPressedFunction: () async {
                 if (validateName(name1Controller.text) == null &&
                     validateName(surname1Controller.text) == null &&
                     validateName(name2Controller.text) == null &&
                     validateName(name2Controller.text) == null) {
-                  Provider.of<ProfileState>(context, listen: false)
+                  await Provider.of<ProfileState>(context, listen: false)
                       .editProfileData(ProfileModel(
                           partner1: Partner(
                               name:
@@ -168,6 +169,11 @@ class _ProfileState extends State<Profile> {
                               status: status2),
                           weddingDate: weddingDate));
 
+                  profileState.refreshProfileData();
+                  setState(() {
+                    profile;
+                  });
+
                   //TODO fix this validation. alloww to update separate fields without editing others
                 } else if ((validateName(name1Controller.text) != null &&
                         profile.partner1.name.isNotEmpty) ||
@@ -177,7 +183,7 @@ class _ProfileState extends State<Profile> {
                         profile.partner2.name.isNotEmpty) ||
                     (validateName(surname2Controller.text) != null &&
                         profile.partner2.name.isNotEmpty)) {
-                  Provider.of<ProfileState>(context, listen: false)
+                  await Provider.of<ProfileState>(context, listen: false)
                       .editProfileData(ProfileModel(
                           partner1: Partner(
                               name: profile.partner1.name,
@@ -186,13 +192,22 @@ class _ProfileState extends State<Profile> {
                               name: profile.partner2.name,
                               status: profile.partner2.status),
                           weddingDate: weddingDate));
+                  profileState.refreshProfileData();
+                  setState(() {
+                    profile;
+                  });
                 } else if (validateName(name1Controller.text) != null ||
                     validateName(surname1Controller.text) != null ||
                     validateName(name2Controller.text) != null ||
                     validateName(surname2Controller.text) != null) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Please fill in all fields')),
+                    const SnackBar(
+                        content: Text('Please fill in all relative fields')),
                   );
+                  profileState.refreshProfileData();
+                  setState(() {
+                    profile;
+                  });
                 }
               }),
         ),

@@ -24,15 +24,6 @@ class VenuesService {
           allVenues.add(VenueModel.fromMap(doc.data(), doc.id));
         }
 
-        // for (var doc in allVenues.toList()) {
-        //   db
-        //       .collection('venues')
-        //       .doc(doc.id)
-        //       .set(doc.createMap(), SetOptions(merge: true))
-        //       .catchError(
-        //           (error) => print("Failed to merge Profile data: $error"));
-        // }
-
         return allVenues.toList();
       });
       return allVenues.toList();

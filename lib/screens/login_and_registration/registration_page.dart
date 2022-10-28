@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:wedding_planner/firebase_services/auth_service.dart';
 import 'package:wedding_planner/firebase_state_management/auth_state.dart';
 import 'package:wedding_planner/screens/home/home_page.dart';
 import 'package:wedding_planner/screens/loading_screen.dart';
@@ -115,8 +118,16 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   border: InputBorder.none),
               validator: (value) {
                 if (value == null || value.isEmpty) {
+                  errorMessage = 'It looks like your email address is empty';
                   return '';
                 }
+                // if (RegExp(
+                //         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                //     .hasMatch(value)) {
+                //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                //     content: Text('Please enter a valid email address.'),
+                //   ));
+                // }
                 return null;
               },
             ),
@@ -194,6 +205,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     value.isEmpty ||
                     _passwordController.text !=
                         _verifyPasswordController.text) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('Your passwords do not match.'),
+                  ));
                   errorMessage = 'Your passwords do not match';
                   return '';
                 }
@@ -201,25 +215,46 @@ class _RegistrationFormState extends State<RegistrationForm> {
               },
             ),
           ),
-          // Login button
+// Sign Up button
           SubmitButton(
             buttonName: 'Sign Up',
             onPressedFunction: () async {
+              // if (RegExp(
+              //         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+              //     .hasMatch(_emailController.text)) {
+              // } else {
+              //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              //     content: Text('Please enter a valid email address.'),
+              //   ));
+              // }
               SystemChannels.textInput.invokeMethod('TextInput.hide');
               if ((_registerFormKey.currentState)!.validate()) {
-                authState.register(
+                await authState.register(
                     email: _emailController.text,
                     password: _passwordController.text);
+                setState(() {
+                  FirebaseAuth.instance.currentUser;
+                  AuthService.showErrorMessage;
+                });
+                if (FirebaseAuth.instance.currentUser != null) {
+                  context.go('/home');
+                } else {
+                  loadingScreen(context);
+                }
               } else {}
             },
           ),
           Visibility(
-            visible: _showErrorMessage,
+            visible: _showErrorMessage || AuthService.showErrorMessage,
             child: Center(
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  errorMessage,
+                  (_showErrorMessage)
+                      ? errorMessage
+                      : (AuthService.showErrorMessage)
+                          ? AuthService.errorMessage
+                          : 'Something went wrong',
                   style: const TextStyle(color: Colors.red),
                   textAlign: TextAlign.center,
                 ),
