@@ -181,7 +181,25 @@ class _GuestsPageState extends State<GuestsPage> {
           Row(
             children: [
               const Text(
-                'Yes: ',
+                'No: ',
+                style: TextStyle(
+                    fontSize: 16,
+                    color: AppColours.primary,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                '${noGuests.length} ',
+                style: const TextStyle(
+                    fontSize: 16,
+                    color: AppColours.secondary,
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              const Text(
+                '| Yes: ',
                 style: TextStyle(
                     fontSize: 16,
                     color: AppColours.primary,
@@ -192,24 +210,6 @@ class _GuestsPageState extends State<GuestsPage> {
                 style: const TextStyle(
                     fontSize: 16,
                     color: Colors.green,
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              const Text(
-                '| No: ',
-                style: TextStyle(
-                    fontSize: 16,
-                    color: AppColours.primary,
-                    fontWeight: FontWeight.bold),
-              ),
-              Text(
-                '${noGuests.length}',
-                style: const TextStyle(
-                    fontSize: 16,
-                    color: AppColours.secondary,
                     fontWeight: FontWeight.bold),
               ),
             ],

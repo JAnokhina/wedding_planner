@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
       },
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        appBar: WPAppBar(title: 'Log In', actions: const [SignOutButton()]),
+        appBar: WPAppBar(title: 'Log In'),
         body: SingleChildScrollView(
           physics: const NeverScrollableScrollPhysics(),
           reverse: false,
@@ -224,28 +224,28 @@ class LoginFormState extends State<LoginForm> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 // Forgot password
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Forgot your password?',
-                      style: TextStyle(
-                          fontFamily: 'Gothic',
-                          fontSize: 13,
-                          color: AppColours.primary),
-                    ),
-                    TextButton(
-                        onPressed: () {},
-                        child: const Text(
-                          'Click Here',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              decoration: TextDecoration.underline),
-                        ))
-                  ],
-                ),
+                // Row(
+                //   mainAxisSize: MainAxisSize.max,
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     const Text(
+                //       'Forgot your password?',
+                //       style: TextStyle(
+                //           fontFamily: 'Gothic',
+                //           fontSize: 13,
+                //           color: AppColours.primary),
+                //     ),
+                //     TextButton(
+                //         onPressed: () {},
+                //         child: const Text(
+                //           'Click Here',
+                //           style: TextStyle(
+                //               fontWeight: FontWeight.bold,
+                //               color: Colors.white,
+                //               decoration: TextDecoration.underline),
+                //         ))
+                //   ],
+                // ),
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -257,12 +257,12 @@ class LoginFormState extends State<LoginForm> {
                         endIndent: 8,
                       ),
                     ),
-                    Text(
-                      'or',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
+                    // Text(
+                    //   'or',
+                    //   style: TextStyle(
+                    //     color: Colors.white,
+                    //   ),
+                    // ),
                     Expanded(
                       child: Divider(
                         color: Colors.white,

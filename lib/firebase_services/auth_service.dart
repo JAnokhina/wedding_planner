@@ -45,19 +45,18 @@ class AuthService {
           .createUserWithEmailAndPassword(email: email, password: password);
       User? user = FirebaseAuth.instance.currentUser;
       print(user);
-      // if (user != null && !user.emailVerified) {
-      //   await user.sendEmailVerification();
-      //   user = FirebaseAuth.instance.currentUser;
-      // }
-      //ToDO check if registration success or not and return some variable
+      if (user != null && !user.emailVerified) {
+        await user.sendEmailVerification();
+        user = FirebaseAuth.instance.currentUser;
+      }
       Future.delayed(Duration(seconds: 5));
       if (user == null) {
         return null;
       } else {
         showErrorMessage = false;
-        await user.sendEmailVerification();
-        user = FirebaseAuth.instance.currentUser;
-        return user;
+        // await user.sendEmailVerification();
+        // user = FirebaseAuth.instance.currentUser;
+        // return user;
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
